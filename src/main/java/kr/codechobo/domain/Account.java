@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author : Eunmo Hong
@@ -29,10 +26,14 @@ public class Account {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private AccountRole role;
+
     @Builder
-    public Account(String email, String nickname, String password) {
+    public Account(String email, String nickname, String password, AccountRole role) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
+        this.role = role;
     }
 }
