@@ -319,3 +319,4 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/java,linux,macos,maven,gradle,windows,eclipse,intellij
+/src/main/resources/application-info.yml
