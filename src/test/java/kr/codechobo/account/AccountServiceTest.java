@@ -63,7 +63,7 @@ class AccountServiceTest {
         assertThrows(ExistsEmailException.class, () -> accountService.join(dto));
     }
 
-    @DisplayName("이미 존재하는 닉네임로 등록시 ExistsEmailException")
+    @DisplayName("이미 존재하는 닉네임로 등록시 ExistsNicknameException")
     @Test
     void join_nickname_fail() {
         JoinRequestDto dto = new JoinRequestDto("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
