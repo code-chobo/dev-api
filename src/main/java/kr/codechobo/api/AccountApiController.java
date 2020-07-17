@@ -1,7 +1,7 @@
 package kr.codechobo.api;
 
 import kr.codechobo.account.AccountService;
-import kr.codechobo.account.dto.JoinRequestDto;
+import kr.codechobo.api.request.JoinRequest;
 import kr.codechobo.api.result.ApiResult;
 import kr.codechobo.api.result.Result;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class AccountApiController {
     private final AccountService accountService;
 
     @PostMapping("/account")
-    public ResponseEntity<ApiResult> join(@RequestBody JoinRequestDto joinRequestDto) {
+    public ResponseEntity<ApiResult> join(@RequestBody JoinRequest joinRequestDto) {
         Long joinId = accountService.join(joinRequestDto);
 
         return Result.created(ApiResult.blank().add("accountId", joinId));

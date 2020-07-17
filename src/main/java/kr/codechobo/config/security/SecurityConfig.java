@@ -1,4 +1,4 @@
-package kr.codechobo.config;
+package kr.codechobo.config.security;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String[] POST_EXCLUDE_URL = {"/api/account", "/api/login"};
+    private static final String[] POST_EXCLUDE_URL = {"/api/account", "/api/authenticate"};
     private static final String[] EXCLUDE_URL = {};
 
     @Override

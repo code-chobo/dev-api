@@ -1,4 +1,4 @@
-package kr.codechobo.account.dto;
+package kr.codechobo.api.request;
 
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Email;
  */
 
 @Getter
-public class JoinRequestDto {
+public class JoinRequest {
 
     @Email
     private String email;
@@ -26,7 +26,7 @@ public class JoinRequestDto {
     @Length(min = 6, max = 50)
     private String passwordConfirm;
 
-    public JoinRequestDto(String email, String nickname, String password, String passwordConfirm) {
+    public JoinRequest(String email, String nickname, String password, String passwordConfirm) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;

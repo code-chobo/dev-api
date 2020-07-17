@@ -1,9 +1,10 @@
 package kr.codechobo.account;
 
-import kr.codechobo.account.dto.JoinRequestDto;
 import kr.codechobo.account.exception.AccountNotFoundException;
 import kr.codechobo.account.exception.ExistsEmailException;
 import kr.codechobo.account.exception.ExistsNicknameException;
+import kr.codechobo.api.request.JoinRequest;
+import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
 import lombok.RequiredArgsConstructor;
@@ -30,19 +31,24 @@ public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenManager tokenManager;
 
     public Account findAccountById(Long id) {
         return accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id));
     }
 
-    public Long join(JoinRequestDto joinRequestDto) {
-        isUniqueEmail(joinRequestDto.getEmail());
-        isUniqueNickname(joinRequestDto.getNickname());
+    public Account findAccountByEmail(String email) {
+        return accountRepository.findByEmail(email).orElseThrow(() -> new AccountNotFoundException(email));
+    }
+
+    public Long join(JoinRequest joinRequest) {
+        isUniqueEmail(joinRequest.getEmail());
+        isUniqueNickname(joinRequest.getNickname());
 
         Account newAccount = Account.builder()
-                .email(joinRequestDto.getEmail())
-                .nickname(joinRequestDto.getNickname())
-                .password(passwordEncoder.encode(joinRequestDto.getPassword()))
+                .email(joinRequest.getEmail())
+                .nickname(joinRequest.getNickname())
+                .password(passwordEncoder.encode(joinRequest.getPassword()))
                 .role(AccountRole.COMMON)
                 .build();
 
@@ -67,5 +73,16 @@ public class AccountService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
         return new User(account.getEmail(), account.getPassword(), List.of(new SimpleGrantedAuthority(account.getRole().name())));
+    }
+
+    public String authenticate(String email, String password) {
+        Account account = findAccountByEmail(email);
+        boolean matches = passwordEncoder.matches(password, account.getPassword());
+
+        if(!matches) {
+            throw new PasswordWrongException();
+        }
+
+        return tokenManager.createToken(account.getNickname());
     }
 }

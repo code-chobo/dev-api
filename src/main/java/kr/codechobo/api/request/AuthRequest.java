@@ -1,4 +1,4 @@
-package kr.codechobo.account.dto;
+package kr.codechobo.api.request;
 
 import lombok.Getter;
 
@@ -8,11 +8,11 @@ import lombok.Getter;
  */
 
 @Getter
-public class LoginRequestDto {
+public class AuthRequest {
     private String email;
     private String password;
 
-    public LoginRequestDto(String email, String password) {
+    public AuthRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }

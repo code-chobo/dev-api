@@ -9,4 +9,8 @@ public class AccountNotFoundException extends RuntimeException {
     public AccountNotFoundException(Long id) {
         super("해당 사용자가 없습니다. " + id);
     }
+
+    public AccountNotFoundException(String emailOrNickname) {
+        super("해당 사용자가 없습니다. " + emailOrNickname);
+    }
 }
