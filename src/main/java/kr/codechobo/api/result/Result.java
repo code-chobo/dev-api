@@ -7,6 +7,10 @@ import org.springframework.util.Assert;
 public class Result {
     private Result(){}
 
+    public static ResponseEntity<ApiResult> createdWithHeader(String headerName, String headerKey) {
+        return ResponseEntity.status(HttpStatus.CREATED).header(headerName, headerKey).build();
+    }
+
     public static ResponseEntity<ApiResult> created() {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
