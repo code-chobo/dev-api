@@ -2,6 +2,8 @@ package kr.codechobo.api;
 
 import kr.codechobo.account.AccountService;
 import kr.codechobo.api.request.AuthRequest;
+import kr.codechobo.api.result.ApiResult;
+import kr.codechobo.api.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,17 +27,19 @@ import java.net.URISyntaxException;
 @RestController
 public class AuthenticateApiController {
 
+    private static final String TOKEN_PREFIX = "Bearer ";
+
     private final AccountService accountService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> create(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<ApiResult> create(@RequestBody AuthRequest authRequest) {
 
         String email = authRequest.getEmail();
         String password = authRequest.getPassword();
 
         String token = accountService.authenticate(email, password);
 
-        return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.AUTHORIZATION, token).build();
+        return Result.createdWithHeader(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token);
     }
 
 }
