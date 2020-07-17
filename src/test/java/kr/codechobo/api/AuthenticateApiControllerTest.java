@@ -2,7 +2,7 @@ package kr.codechobo.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.codechobo.account.AccountService;
-import kr.codechobo.account.PasswordWrongException;
+import kr.codechobo.account.exception.PasswordWrongException;
 import kr.codechobo.api.request.AuthRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

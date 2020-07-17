@@ -1,6 +1,6 @@
 package kr.codechobo.api.exceptionAdvice;
 
-import kr.codechobo.account.PasswordWrongException;
+import kr.codechobo.account.exception.PasswordWrongException;
 import kr.codechobo.account.exception.ExistsEmailException;
 import kr.codechobo.account.exception.ExistsNicknameException;
 import kr.codechobo.api.result.ApiResult;

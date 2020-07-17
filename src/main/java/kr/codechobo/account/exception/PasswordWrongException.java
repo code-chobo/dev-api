@@ -1,4 +1,4 @@
-package kr.codechobo.account;
+package kr.codechobo.account.exception;
 
 /**
  * @author : Eunmo Hong

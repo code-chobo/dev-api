@@ -1,8 +1,7 @@
 package kr.codechobo.account;
 
 import kr.codechobo.account.exception.AccountNotFoundException;
-import kr.codechobo.account.exception.ExistsEmailException;
-import kr.codechobo.account.exception.ExistsNicknameException;
+import kr.codechobo.account.exception.PasswordWrongException;
 import kr.codechobo.api.request.JoinRequest;
 import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
