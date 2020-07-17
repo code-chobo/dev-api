@@ -25,6 +25,8 @@ import java.net.URISyntaxException;
 @RestController
 public class AuthenticateApiController {
 
+    private static final String TOKEN_PREFIX = "Bearer ";
+
     private final AccountService accountService;
 
     @PostMapping("/authenticate")
@@ -35,7 +37,7 @@ public class AuthenticateApiController {
 
         String token = accountService.authenticate(email, password);
 
-        return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.AUTHORIZATION, token).build();
+        return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token).build();
     }
 
 }
