@@ -42,7 +42,7 @@ public class AccountService implements UserDetailsService {
 
     public Long join(JoinRequest joinRequest) {
         Account newAccount = Account.builder()
-                .email(joinRequest.getEmail())
+                .email(joinRequest.getEmail().toLowerCase())
                 .nickname(joinRequest.getNickname())
                 .password(passwordEncoder.encode(joinRequest.getPassword()))
                 .role(AccountRole.COMMON)
@@ -60,7 +60,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public String authenticate(String email, String password) {
-        Account account = findAccountByEmail(email);
+        Account account = findAccountByEmail(email.toLowerCase());
         boolean matches = passwordEncoder.matches(password, account.getPassword());
 
         if(!matches) {
