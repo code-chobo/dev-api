@@ -37,7 +37,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account findAccountByEmail(String email) {
-        return accountRepository.findByEmail(email).orElseThrow(() -> new AccountNotFoundException(email));
+        return accountRepository.findByEmail(email.toLowerCase()).orElseThrow(() -> new AccountNotFoundException(email));
     }
 
     public Long join(JoinRequest joinRequest) {
@@ -60,7 +60,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public String authenticate(String email, String password) {
-        Account account = findAccountByEmail(email.toLowerCase());
+        Account account = findAccountByEmail(email);
         boolean matches = passwordEncoder.matches(password, account.getPassword());
 
         if(!matches) {
