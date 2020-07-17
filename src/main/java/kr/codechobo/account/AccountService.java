@@ -42,9 +42,6 @@ public class AccountService implements UserDetailsService {
     }
 
     public Long join(JoinRequest joinRequest) {
-        isUniqueEmail(joinRequest.getEmail());
-        isUniqueNickname(joinRequest.getNickname());
-
         Account newAccount = Account.builder()
                 .email(joinRequest.getEmail())
                 .nickname(joinRequest.getNickname())
@@ -55,18 +52,6 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(newAccount);
 
         return newAccount.getId();
-    }
-
-    private void isUniqueNickname(String nickname) {
-        if(accountRepository.existsByNickname(nickname)) {
-            throw new ExistsNicknameException(nickname);
-        }
-    }
-
-    private void isUniqueEmail(String email) {
-        if(accountRepository.existsByEmail(email)) {
-            throw new ExistsEmailException(email);
-        }
     }
 
     @Override

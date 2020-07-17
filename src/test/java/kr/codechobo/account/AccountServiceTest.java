@@ -59,24 +59,6 @@ class AccountServiceTest {
         verify(accountRepository).save(any(Account.class));
     }
 
-    @DisplayName("이미 존재하는 이메일로 가입시도  ExistsEmailException")
-    @Test
-    void join_email_fail() {
-        JoinRequest dto = new JoinRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
-        when(accountRepository.existsByEmail(dto.getEmail())).thenReturn(true);
-
-        assertThrows(ExistsEmailException.class, () -> accountService.join(dto));
-    }
-
-    @DisplayName("이미 존재하는 닉네임로 가입시도 ExistsNicknameException")
-    @Test
-    void join_nickname_fail() {
-        JoinRequest dto = new JoinRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
-        when(accountRepository.existsByNickname(dto.getNickname())).thenReturn(true);
-
-        assertThrows(ExistsNicknameException.class, () -> accountService.join(dto));
-    }
-
     @DisplayName("findById 잘된다.")
     @Test
     void findById() {
