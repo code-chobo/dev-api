@@ -1,9 +1,11 @@
 package kr.codechobo.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.codechobo.account.SessionAccount;
+import kr.codechobo.account.AccountAdapter;
+import kr.codechobo.api.request.AuthRequest;
 import kr.codechobo.domain.Account;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,17 +26,21 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    private static final String TOKEN_PREFIX = "Bearer ";
+
+    private final TokenManager tokenManager;
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, TokenManager tokenManager) {
         super.setAuthenticationManager(authenticationManager);
+        this.tokenManager = tokenManager;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         UsernamePasswordAuthenticationToken token;
         try {
-            SessionAccount sessionAccount = new ObjectMapper().readValue(request.getInputStream(), SessionAccount.class);
-            Account account = sessionAccount.getAccount();
-            token = new UsernamePasswordAuthenticationToken(account.getEmail(), account.getPassword());
+            AuthRequest authRequest = new ObjectMapper().readValue(request.getInputStream(), AuthRequest.class);
+            token = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -44,6 +50,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        AccountAdapter adapter = (AccountAdapter) authResult.getPrincipal();
 
+        String token = tokenManager.createToken(adapter.getUsername());
+
+        response.addHeader(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token);
     }
+
+
 }

@@ -1,6 +1,5 @@
 package kr.codechobo.account;
 
-import kr.codechobo.account.exception.PasswordWrongException;
 import kr.codechobo.api.request.JoinRequest;
 import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
@@ -16,8 +15,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -74,39 +73,6 @@ class AccountServiceTest {
         Account findAccount = accountService.findAccountById(1L);
 
         assertNotNull(findAccount);
-    }
-
-    @DisplayName("authenticate통과하면 토큰 발급 성공")
-    @Test
-    void auth_success() {
-        Account newAccount = Account.builder()
-                .nickname("tester")
-                .password("11111111")
-                .build();
-
-        given(passwordEncoder.matches("11111111", newAccount.getPassword())).willReturn(true);
-        given(tokenManager.createToken(anyString())).willReturn("!@#$%^&*");
-        given(accountRepository.findByEmail(anyString())).willReturn(Optional.of(newAccount));
-
-        String token = accountService.authenticate("email@email.com", "11111111");
-
-        assertNotNull(token);
-    }
-
-    @DisplayName("authenticate 비밀번호 서로 다르면 토큰 발급 실패 - PasswordWrongException.class")
-    @Test
-    void auth_fail() {
-        Account newAccount = Account.builder()
-                .nickname("tester")
-                .password("22222222")
-                .build();
-
-        given(passwordEncoder.matches("11111111", newAccount.getPassword())).willReturn(false);
-        given(tokenManager.createToken(anyString())).willReturn("!@#$%^&*");
-        given(accountRepository.findByEmail(anyString())).willReturn(Optional.of(newAccount));
-
-        assertThrows(PasswordWrongException.class, () -> accountService.authenticate("email@email.com", "11111111"));
-
     }
 
 }

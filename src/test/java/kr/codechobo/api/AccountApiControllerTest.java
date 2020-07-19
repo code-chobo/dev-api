@@ -6,12 +6,14 @@ import kr.codechobo.account.AccountService;
 import kr.codechobo.account.exception.ExistsEmailException;
 import kr.codechobo.api.request.JoinRequest;
 import kr.codechobo.api.validator.JoinRequestValidator;
+import kr.codechobo.config.security.TokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -46,6 +48,9 @@ class AccountApiControllerTest {
 
     @MockBean
     AccountRepository accountRepository;
+
+    @MockBean
+    TokenManager tokenManager;
 
     @DisplayName("가입 성공")
     @Test
