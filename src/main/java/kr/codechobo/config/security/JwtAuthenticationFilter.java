@@ -52,7 +52,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         AccountAdapter adapter = (AccountAdapter) authResult.getPrincipal();
 
-        String token = tokenManager.createToken(adapter.getAccount().getNickname());
+        String token = tokenManager.createToken(adapter.getAccount());
 
         response.addHeader(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token);
     }
