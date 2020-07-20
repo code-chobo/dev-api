@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SampleApiControllerTest {
 
     private final static String TOKEN_PREFIX = "Bearer ";
+
     @Autowired
     MockMvc mockMvc;
 

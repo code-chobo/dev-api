@@ -6,6 +6,7 @@ import kr.codechobo.account.exception.ExistsNicknameException;
 import kr.codechobo.api.result.ApiResult;
 import kr.codechobo.api.result.Result;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -29,6 +30,11 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(ExistsEmailException.class)
     public ResponseEntity<ApiResult> existsEmail(ExistsEmailException e) {
+        return Result.failure(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResult> methodArgsValid(MethodArgumentNotValidException e) {
         return Result.failure(e.getMessage());
     }
 }
