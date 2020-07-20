@@ -1,7 +1,10 @@
 package kr.codechobo.api;
 
 import kr.codechobo.account.AccountAdapter;
+import kr.codechobo.account.CurrentAccount;
+import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,21 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
  * @since : 2020/07/19
  */
 
+@Slf4j
 @RequestMapping("/api")
 @RestController
 public class SampleApiController {
 
     @PreAuthorize("hasAuthority('COMMON')")
     @GetMapping("/info/common")
-    public String infoCommonAccount(@AuthenticationPrincipal AccountAdapter accountAdapter) {
-        System.out.println(accountAdapter);
+    public String infoCommonAccount(@CurrentAccount Account account) {
+        log.info(account.toString());
         return "COMMON ACCOUNT";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/info/admin")
-    public String infoAdminAccount(@AuthenticationPrincipal AccountAdapter accountAdapter) {
-        System.out.println(accountAdapter);
+    public String infoAdminAccount(@CurrentAccount Account account) {
+        log.info(account.toString());
         return "ADMIN ACCOUNT";
     }
 }

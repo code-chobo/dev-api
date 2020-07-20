@@ -22,6 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author : Eunmo Hong
@@ -57,8 +58,9 @@ class SampleApiControllerTest {
         given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
 
         mockMvc.perform(get("/api/info/common")
-                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX+token))
-                .andDo(print());
+                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @DisplayName("ADMIN 유저 테스트")
@@ -77,8 +79,9 @@ class SampleApiControllerTest {
         given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
 
         mockMvc.perform(get("/api/info/admin")
-                .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX+token))
-                .andDo(print());
+                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 }

@@ -1,9 +1,6 @@
 package kr.codechobo.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,8 @@ import javax.persistence.*;
  * @since : 2020/07/15
  */
 
+@EqualsAndHashCode(of = "id")
+@ToString(of = {"id", "email", "nickname"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -37,16 +36,5 @@ public class Account {
         this.nickname = nickname;
         this.password = password;
         this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
     }
 }
