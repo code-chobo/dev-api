@@ -76,7 +76,7 @@ public class Study {
                 .endDate(endDate)
                 .numberOfMaxEnrolment(numberOfMaxEnrolment)
                 .numberOfMinEnrolment(numberOfMinEnrolment)
-                .closed(true)
+                .closed(false)
                 .bankAccount(bankAccount)
                 .leaderContact(leaderContact)
                 .build();
