@@ -32,8 +32,20 @@ public class StudyAccount {
     private String studentContact;
 
     @Builder
-    public StudyAccount(Account account, Study study) {
+    public StudyAccount(Account account, Study study, String refundBankAccount, String studentContact) {
         this.account = account;
         this.study = study;
+        this.refundBankAccount = refundBankAccount;
+        this.studentContact = studentContact;
+    }
+
+    public String changeRefundBankAccount(String refundBankAccount) {
+        this.refundBankAccount = refundBankAccount;
+        return refundBankAccount;
+    }
+
+    public String changeStudentContact(String studentContact) {
+        this.studentContact = studentContact;
+        return studentContact;
     }
 }
