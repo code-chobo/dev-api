@@ -2,7 +2,8 @@ package kr.codechobo.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.codechobo.account.AccountRepository;
-import kr.codechobo.api.request.StudyCreateRequest;
+import kr.codechobo.api.request.CreateStudyRequest;
+import kr.codechobo.api.request.JoinStudyRequest;
 import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
@@ -52,23 +53,17 @@ class StudyApiControllerTest {
     StudyService studyService;
 
 
-    @DisplayName("startDate가 EndDate 보다 늦으면 안된다.")
+    @DisplayName("startDate가 EndDate 보다 늦으면 안된다. 4xx client error")
     @Test
     void isStartDateBeforeThanEndDate() throws Exception {
         //given
-        Account account = Account.builder()
-                .id(1L)
-                .email("email@email.com")
-                .nickname("tester")
-                .password("12345678")
-                .role(AccountRole.COMMON)
-                .build();
+        Account account = createAccount();
 
         String token = "!@#$%^&*";
         given(tokenManager.createToken(account)).willReturn(token);
         given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
 
-        StudyCreateRequest request = StudyCreateRequest.builder()
+        CreateStudyRequest request = CreateStudyRequest.builder()
                 .startDate(LocalDateTime.of(2020, Month.DECEMBER, 1, 0, 0))
                 .endDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
                 .build();
@@ -83,28 +78,17 @@ class StudyApiControllerTest {
         //then
      }
 
-    @DisplayName("최소인원이 최대인원보다 많으면 안된다.")
+    @DisplayName("최소인원이 최대인원보다 많으면 안된다. 4xx client error")
     @Test
     void isMinEnrolmentLessThanMaxEnrolment() throws Exception {
         //given
-        Account account = Account.builder()
-                .id(1L)
-                .email("email@email.com")
-                .nickname("tester")
-                .password("12345678")
-                .role(AccountRole.COMMON)
-                .build();
+        Account account = createAccount();
 
         String token = "!@#$%^&*";
         given(tokenManager.createToken(account)).willReturn(token);
         given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
 
-        StudyCreateRequest request = StudyCreateRequest.builder()
-                .numberOfMinEnrolment(2)
-                .numberOfMaxEnrolment(1)
-                .startDate(LocalDateTime.of(2020, Month.DECEMBER, 1, 0, 0))
-                .endDate(LocalDateTime.of(2020, Month.DECEMBER, 12, 0, 0))
-                .build();
+        CreateStudyRequest request = createStudyRequest(2, 1);
 
         //when
         mockMvc.perform(post("/api/study")
@@ -116,28 +100,17 @@ class StudyApiControllerTest {
         //then
     }
 
-    @DisplayName("정상값 입력시 200.")
+    @DisplayName("스터디 만들기 api - 정상값 입력시 201.")
     @Test
     void validArguments() throws Exception {
         //given
-        Account account = Account.builder()
-                .id(1L)
-                .email("email@email.com")
-                .nickname("tester")
-                .password("12345678")
-                .role(AccountRole.COMMON)
-                .build();
+        Account account = createAccount();
 
         String token = "!@#$%^&*";
         given(tokenManager.createToken(account)).willReturn(token);
         given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
 
-        StudyCreateRequest request = StudyCreateRequest.builder()
-                .numberOfMinEnrolment(1)
-                .numberOfMaxEnrolment(1)
-                .startDate(LocalDateTime.of(2020, Month.DECEMBER, 1, 0, 0))
-                .endDate(LocalDateTime.of(2020, Month.DECEMBER, 12, 0, 0))
-                .build();
+        CreateStudyRequest request = createStudyRequest(1, 1);
 
         //when
         mockMvc.perform(post("/api/study")
@@ -145,8 +118,50 @@ class StudyApiControllerTest {
                     .content(objectMapper.writeValueAsString(request))
                     .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
         //then
+    }
+
+
+
+    @DisplayName("스터디 가입 잘 된다.")
+    @Test
+    void joinStudy() throws Exception{
+        Account account = createAccount();
+
+        String token = "!@#$%^&*";
+        given(tokenManager.createToken(account)).willReturn(token);
+        given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
+
+        mockMvc.perform(post("/api/study/member")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(joinStudyRequest()))
+                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    private CreateStudyRequest createStudyRequest(int numberOfMinEnrolment, int numberOfMaxEnrolment) {
+        return CreateStudyRequest.builder()
+                .numberOfMinEnrolment(numberOfMinEnrolment)
+                .numberOfMaxEnrolment(numberOfMaxEnrolment)
+                .startDate(LocalDateTime.of(2020, Month.DECEMBER, 1, 0, 0))
+                .endDate(LocalDateTime.of(2020, Month.DECEMBER, 12, 0, 0))
+                .build();
+    }
+
+    private JoinStudyRequest joinStudyRequest() {
+        return new JoinStudyRequest(0L, "국민은행 1111-1111", "010-1234-1234");
+    }
+
+    private Account createAccount() {
+        return Account.builder()
+                .id(1L)
+                .email("email@email.com")
+                .nickname("tester")
+                .password("12345678")
+                .role(AccountRole.COMMON)
+                .build();
     }
 
 

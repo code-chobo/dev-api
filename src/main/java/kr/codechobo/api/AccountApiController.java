@@ -1,7 +1,7 @@
 package kr.codechobo.api;
 
 import kr.codechobo.account.AccountService;
-import kr.codechobo.api.request.JoinRequest;
+import kr.codechobo.api.request.JoinAccountRequest;
 import kr.codechobo.api.result.ApiResult;
 import kr.codechobo.api.result.Result;
 import kr.codechobo.api.validator.JoinRequestValidator;
@@ -24,15 +24,14 @@ public class AccountApiController {
     private final AccountService accountService;
     private final JoinRequestValidator joinRequestValidator;
 
-    @InitBinder("joinRequest")
+    @InitBinder("joinAccountRequest")
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(joinRequestValidator);
     }
 
     @PostMapping("/account")
-    public ResponseEntity<ApiResult> join(@RequestBody @Validated JoinRequest joinRequest) {
-        Long joinId = accountService.join(joinRequest);
-
+    public ResponseEntity<ApiResult> join(@RequestBody @Validated JoinAccountRequest joinAccountRequest) {
+        Long joinId = accountService.join(joinAccountRequest);
         return Result.created(ApiResult.blank().add("accountId", joinId));
     }
 }

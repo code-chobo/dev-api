@@ -1,7 +1,7 @@
 package kr.codechobo.account;
 
 import kr.codechobo.account.exception.AccountNotFoundException;
-import kr.codechobo.api.request.JoinRequest;
+import kr.codechobo.api.request.JoinAccountRequest;
 import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
@@ -35,11 +35,11 @@ public class AccountService implements UserDetailsService {
         return accountRepository.findByEmail(email.toLowerCase()).orElseThrow(() -> new AccountNotFoundException(email));
     }
 
-    public Long join(JoinRequest joinRequest) {
+    public Long join(JoinAccountRequest joinAccountRequest) {
         Account newAccount = Account.builder()
-                .email(joinRequest.getEmail().toLowerCase())
-                .nickname(joinRequest.getNickname())
-                .password(passwordEncoder.encode(joinRequest.getPassword()))
+                .email(joinAccountRequest.getEmail().toLowerCase())
+                .nickname(joinAccountRequest.getNickname())
+                .password(passwordEncoder.encode(joinAccountRequest.getPassword()))
                 .role(AccountRole.COMMON)
                 .build();
 

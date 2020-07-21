@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.account.AccountService;
 import kr.codechobo.account.exception.ExistsEmailException;
-import kr.codechobo.api.request.JoinRequest;
+import kr.codechobo.api.request.JoinAccountRequest;
 import kr.codechobo.api.validator.JoinRequestValidator;
 import kr.codechobo.config.security.TokenManager;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -59,7 +58,7 @@ class AccountApiControllerTest {
     @DisplayName("가입 성공")
     @Test
     void join() throws Exception {
-        JoinRequest dto = new JoinRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
+        JoinAccountRequest dto = new JoinAccountRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
         when(joinRequestValidator.supports(any())).thenReturn(true);
         mockMvc.perform(post("/api/account")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +70,7 @@ class AccountApiControllerTest {
     @DisplayName("이미 존재하는 이메일로 가입시도  ExistsEmailException")
     @Test
     void join_email_fail() throws Exception {
-        JoinRequest dto = new JoinRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
+        JoinAccountRequest dto = new JoinAccountRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
         when(joinRequestValidator.supports(any())).thenReturn(true);
         doThrow(ExistsEmailException.class).when(joinRequestValidator).validate(any(), any());
 
@@ -85,7 +84,7 @@ class AccountApiControllerTest {
     @DisplayName("이미 존재하는 닉네임로 가입시도 ExistsNicknameException")
     @Test
     void join_nickname_fail() throws Exception {
-        JoinRequest dto = new JoinRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
+        JoinAccountRequest dto = new JoinAccountRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
         when(joinRequestValidator.supports(any())).thenReturn(true);
         doThrow(ExistsEmailException.class).when(joinRequestValidator).validate(any(), any());
 

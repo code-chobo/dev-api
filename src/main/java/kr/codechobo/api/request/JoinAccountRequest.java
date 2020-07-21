@@ -12,7 +12,7 @@ import javax.validation.constraints.Email;
  */
 
 @Getter
-public class JoinRequest {
+public class JoinAccountRequest {
 
     @Email
     private String email;
@@ -26,7 +26,7 @@ public class JoinRequest {
     @Length(min = 6, max = 50)
     private String passwordConfirm;
 
-    public JoinRequest(String email, String nickname, String password, String passwordConfirm) {
+    public JoinAccountRequest(String email, String nickname, String password, String passwordConfirm) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;

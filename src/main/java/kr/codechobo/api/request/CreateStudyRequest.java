@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
-public class StudyCreateRequest {
+public class CreateStudyRequest {
 
     private String title;
     private String description;
@@ -27,7 +27,7 @@ public class StudyCreateRequest {
     private String leaderContact;
 
     @Builder
-    public StudyCreateRequest(String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, String bankAccount, String leaderContact) {
+    public CreateStudyRequest(String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, String bankAccount, String leaderContact) {
         this.title = title;
         this.description = description;
         this.location = location;

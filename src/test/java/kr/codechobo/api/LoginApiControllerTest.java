@@ -1,24 +1,16 @@
 package kr.codechobo.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.codechobo.account.AccountService;
 import kr.codechobo.api.request.AuthRequest;
-import kr.codechobo.api.request.JoinRequest;
-import kr.codechobo.api.validator.JoinRequestValidator;
-import kr.codechobo.config.security.JwtAuthenticationFilter;
-import kr.codechobo.config.security.TokenManager;
-import kr.codechobo.domain.Account;
+import kr.codechobo.api.request.JoinAccountRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,8 +45,8 @@ public class LoginApiControllerTest {
 
         String email = "email@email.com";
         String password = "111111";
-        JoinRequest joinRequest = new JoinRequest(email,"gracelove",password,password);
-        accountService.join(joinRequest);
+        JoinAccountRequest joinAccountRequest = new JoinAccountRequest(email,"gracelove",password,password);
+        accountService.join(joinAccountRequest);
 
         AuthRequest authRequest = new AuthRequest(email, password);
 
@@ -72,8 +64,8 @@ public class LoginApiControllerTest {
     void auth_fail() throws Exception {
         String email = "email@email.com";
         String password = "111111";
-        JoinRequest joinRequest = new JoinRequest(email,"gracelove",password,password);
-        accountService.join(joinRequest);
+        JoinAccountRequest joinAccountRequest = new JoinAccountRequest(email,"gracelove",password,password);
+        accountService.join(joinAccountRequest);
 
         AuthRequest authRequest = new AuthRequest(email, "wrong.password");
 

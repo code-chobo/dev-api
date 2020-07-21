@@ -3,7 +3,7 @@ package kr.codechobo.api.validator;
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.account.exception.ExistsEmailException;
 import kr.codechobo.account.exception.ExistsNicknameException;
-import kr.codechobo.api.request.JoinRequest;
+import kr.codechobo.api.request.JoinAccountRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -22,21 +22,21 @@ public class JoinRequestValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.isAssignableFrom(JoinRequest.class);
+        return clazz.isAssignableFrom(JoinAccountRequest.class);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        JoinRequest joinRequest = (JoinRequest) target;
-        boolean existsByEmail = accountRepository.existsByEmail(joinRequest.getEmail());
-        boolean existsByNickname = accountRepository.existsByNickname(joinRequest.getNickname());
+        JoinAccountRequest joinAccountRequest = (JoinAccountRequest) target;
+        boolean existsByEmail = accountRepository.existsByEmail(joinAccountRequest.getEmail());
+        boolean existsByNickname = accountRepository.existsByNickname(joinAccountRequest.getNickname());
 
         if(existsByEmail) {
-            throw new ExistsEmailException(joinRequest.getEmail());
+            throw new ExistsEmailException(joinAccountRequest.getEmail());
         }
 
         if(existsByNickname) {
-            throw new ExistsNicknameException(joinRequest.getNickname());
+            throw new ExistsNicknameException(joinAccountRequest.getNickname());
         }
     }
 }

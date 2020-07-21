@@ -1,6 +1,6 @@
 package kr.codechobo.account;
 
-import kr.codechobo.api.request.JoinRequest;
+import kr.codechobo.api.request.JoinAccountRequest;
 import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
@@ -16,8 +16,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,7 +47,7 @@ class AccountServiceTest {
     @DisplayName("회원가입 잘된다.")
     @Test
     void join() {
-        JoinRequest dto = new JoinRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
+        JoinAccountRequest dto = new JoinAccountRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
 
         accountService.join(dto);
 
