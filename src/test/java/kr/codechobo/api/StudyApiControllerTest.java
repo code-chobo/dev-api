@@ -7,6 +7,7 @@ import kr.codechobo.api.request.JoinStudyRequest;
 import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
+import kr.codechobo.domain.Study;
 import kr.codechobo.study.StudyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -122,8 +124,6 @@ class StudyApiControllerTest {
         //then
     }
 
-
-
     @DisplayName("스터디 가입 잘 된다.")
     @Test
     void joinStudy() throws Exception{
@@ -139,6 +139,15 @@ class StudyApiControllerTest {
                     .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("스터디 단 건 조회")
+    @Test
+    void findStudyById() throws Exception{
+        given(studyService.findStudyById(anyLong())).willReturn(createStudy());
+        mockMvc.perform(get("/api/study/{studyId}", 1L))
+                .andDo(print());
+
     }
 
     private CreateStudyRequest createStudyRequest(int numberOfMinEnrolment, int numberOfMaxEnrolment) {
@@ -162,6 +171,30 @@ class StudyApiControllerTest {
                 .password("12345678")
                 .role(AccountRole.COMMON)
                 .build();
+    }
+
+    private Account createManager() {
+        return Account.builder()
+                .id(2L)
+                .email("email@email.com")
+                .nickname("Manager")
+                .password("12345678")
+                .role(AccountRole.COMMON)
+                .build();
+    }
+
+    private Study createStudy() {
+        return Study.builder()
+                .id(1L)
+                .title("title")
+                .description("desc")
+                .location("강남구")
+                .startDate(LocalDateTime.of(2020, Month.DECEMBER, 1, 0, 0))
+                .endDate(LocalDateTime.of(2020, Month.DECEMBER, 10, 0, 0))
+                .numberOfMaxEnrolment(2)
+                .numberOfMinEnrolment(1)
+                .bankAccount("국민 111")
+                .manager(createManager()).build();
     }
 
 

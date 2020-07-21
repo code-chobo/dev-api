@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] POST_EXCLUDE_URL = {"/api/account", "/login"};
+    private static final String[] GET_EXCLUDE_URL = {"/api/study/*"};
     private static final String[] EXCLUDE_URL = {"/api/info"};
 
     private final TokenManager tokenManager;
@@ -49,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, POST_EXCLUDE_URL).permitAll()
+                .antMatchers(HttpMethod.GET, GET_EXCLUDE_URL).permitAll()
                 .anyRequest().authenticated();
 
         http

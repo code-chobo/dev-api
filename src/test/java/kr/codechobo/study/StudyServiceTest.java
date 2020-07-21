@@ -17,7 +17,9 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -69,8 +71,22 @@ class StudyServiceTest {
         verify(studyAccountRepository).save(any(StudyAccount.class));
     }
 
+    @DisplayName("service.findStudyById() 하면 study 성공적으로 조회")
+    @Test
+    void findStudyByIdService() {
+        //given
+        given(studyRepository.findById(anyLong())).willReturn(Optional.of(createStudy()));
+
+        //when
+        Study study = studyService.findStudyById(1L);
+
+        //then
+        assertNotNull(study);
+        verify(studyRepository).findById(1L);
+    }
+
     private Study createStudy() {
-        return Study.createStudy("title", "desc", "서울시 강남구", LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), 2, 1, "국민 1111", "010-3349-9440", createManager());
+        return Study.createStudy("title", "desc", "서울시 강남구", LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), 2, 1, "국민 1111",  createManager());
     }
 
     private Account createManager() {

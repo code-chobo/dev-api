@@ -3,18 +3,17 @@ package kr.codechobo.api;
 import kr.codechobo.account.CurrentAccount;
 import kr.codechobo.api.request.CreateStudyRequest;
 import kr.codechobo.api.request.JoinStudyRequest;
+import kr.codechobo.api.response.StudyResponse;
 import kr.codechobo.api.result.ApiResult;
 import kr.codechobo.api.result.Result;
 import kr.codechobo.domain.Account;
+import kr.codechobo.domain.Study;
 import kr.codechobo.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author : Eunmo Hong
@@ -41,6 +40,12 @@ public class StudyApiController {
                                                @CurrentAccount Account account) {
         Long studyAccountId = studyService.joinStudy(joinStudyRequest, account);
         return Result.ok(ApiResult.blank().add("studyAccountId", studyAccountId));
+    }
+
+    @GetMapping("/study/{studyId}")
+    public ResponseEntity<ApiResult> findStudy(@PathVariable Long studyId) {
+        Study study = studyService.findStudyById(studyId);
+        return StudyResponse.build(study);
     }
 
 }

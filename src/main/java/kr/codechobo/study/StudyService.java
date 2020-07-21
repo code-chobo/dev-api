@@ -26,7 +26,7 @@ public class StudyService {
     private final StudyAccountRepository studyAccountRepository;
 
     public Long createStudy(CreateStudyRequest request, Account account) {
-        Study study = Study.createStudy(request.getTitle(), request.getDescription(), request.getLocation(), request.getStartDate(), request.getEndDate(), request.getNumberOfMaxEnrolment(), request.getNumberOfMinEnrolment(), request.getBankAccount(), request.getLeaderContact(), account);
+        Study study = Study.createStudy(request.getTitle(), request.getDescription(), request.getLocation(), request.getStartDate(), request.getEndDate(), request.getNumberOfMaxEnrolment(), request.getNumberOfMinEnrolment(), request.getBankAccount(), account);
         studyRepository.save(study);
         return study.getId();
     }
@@ -43,4 +43,9 @@ public class StudyService {
         studyAccountRepository.save(studyAccount);
         return studyAccount.getId();
     }
+
+    public Study findStudyById(long studyId) {
+        return studyRepository.findById(studyId).orElseThrow(() -> new StudyNotFoundException(studyId));
+    }
+
 }
