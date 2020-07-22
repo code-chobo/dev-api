@@ -43,9 +43,4 @@ public class CreateStudyRequest {
     public boolean isStartDateBeforeThanEndDate() {
         return startDate.isBefore(endDate);
     }
-
-    @AssertTrue
-    public boolean isMinEnrolmentLessThanMaxEnrolment() {
-        return numberOfMinEnrolment <= numberOfMaxEnrolment;
-    }
 }

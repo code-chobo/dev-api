@@ -31,12 +31,32 @@ public class StudyAccount {
 
     private String studentContact;
 
+    private boolean canceledJoin;
+
+    @Enumerated(EnumType.STRING)
+    private StudyRole studyRole;
+
     @Builder
-    public StudyAccount(Account account, Study study, String refundBankAccount, String studentContact) {
+    public StudyAccount(Long id, Account account, Study study, String refundBankAccount, String studentContact, boolean canceledJoin, StudyRole studyRole) {
+        this.id = id;
         this.account = account;
         this.study = study;
         this.refundBankAccount = refundBankAccount;
         this.studentContact = studentContact;
+        this.canceledJoin = canceledJoin;
+        this.studyRole = studyRole;
+    }
+
+    public static StudyAccount CreateStudyAccount(Account account, Study study, String refundBankAccount, String studentContact, StudyRole studyRole) {
+        study.increaseNumberOfCurrentEnrolment();
+        return StudyAccount.builder()
+                .account(account)
+                .study(study)
+                .refundBankAccount(refundBankAccount)
+                .studentContact(studentContact)
+                .canceledJoin(false)
+                .studyRole(studyRole)
+                .build();
     }
 
     public String changeRefundBankAccount(String refundBankAccount) {
@@ -47,5 +67,10 @@ public class StudyAccount {
     public String changeStudentContact(String studentContact) {
         this.studentContact = studentContact;
         return studentContact;
+    }
+
+    public void canceledJoin() {
+        this.canceledJoin = true;
+        this.study.decreaseNumberOfCurrentEnrolment();
     }
 }

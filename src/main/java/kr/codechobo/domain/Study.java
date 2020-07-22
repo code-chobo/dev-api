@@ -41,16 +41,11 @@ public class Study {
 
     private String bankAccount;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    private Account manager;
-
     @Builder
     public Study(Long id, String title, String description, String location,
                  LocalDateTime startDate, LocalDateTime endDate,
                  int numberOfMaxEnrolment, int numberOfMinEnrolment,
-                 boolean closed, String bankAccount,
-                 Account manager) {
+                 boolean closed, String bankAccount) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -65,13 +60,12 @@ public class Study {
         this.closed = closed;
         this.bankAccount = bankAccount;
 
-        this.manager = manager;
     }
 
     public static Study createStudy(String title, String description, String location,
                                     LocalDateTime startDate, LocalDateTime endDate,
                                     int numberOfMaxEnrolment, int numberOfMinEnrolment,
-                                    String bankAccount, Account manager) {
+                                    String bankAccount) {
         return Study.builder()
                 .title(title)
                 .description(description)
@@ -82,8 +76,15 @@ public class Study {
                 .numberOfMinEnrolment(numberOfMinEnrolment)
                 .closed(false)
                 .bankAccount(bankAccount)
-                .manager(manager)
                 .build();
+    }
+
+    public void increaseNumberOfCurrentEnrolment() {
+        this.numberOfCurrentEnrolment++;
+    }
+
+    public void decreaseNumberOfCurrentEnrolment() {
+        this.numberOfCurrentEnrolment++;
     }
 
 }

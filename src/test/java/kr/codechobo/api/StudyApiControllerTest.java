@@ -80,28 +80,6 @@ class StudyApiControllerTest {
         //then
      }
 
-    @DisplayName("최소인원이 최대인원보다 많으면 안된다. 4xx client error")
-    @Test
-    void isMinEnrolmentLessThanMaxEnrolment() throws Exception {
-        //given
-        Account account = createAccount();
-
-        String token = "!@#$%^&*";
-        given(tokenManager.createToken(account)).willReturn(token);
-        given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
-
-        CreateStudyRequest request = createStudyRequest(2, 1);
-
-        //when
-        mockMvc.perform(post("/api/study")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(request))
-                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token))
-                .andDo(print())
-                .andExpect(status().is4xxClientError());
-        //then
-    }
-
     @DisplayName("스터디 만들기 api - 정상값 입력시 201.")
     @Test
     void validArguments() throws Exception {
@@ -194,7 +172,7 @@ class StudyApiControllerTest {
                 .numberOfMaxEnrolment(2)
                 .numberOfMinEnrolment(1)
                 .bankAccount("국민 111")
-                .manager(createManager()).build();
+                .build();
     }
 
 

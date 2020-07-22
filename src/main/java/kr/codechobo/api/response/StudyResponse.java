@@ -33,12 +33,9 @@ public class StudyResponse {
                 .bankAccount(study.getBankAccount())
                 .build();
 
-        ManagerData managerData = new ManagerData(study.getManager());
 
         ApiResult result = ApiResult.blank()
-                .add("study", studyData)
-                .add("manager", managerData);
-
+                .add("study", studyData);
         return Result.ok(result);
     }
 
@@ -71,20 +68,6 @@ public class StudyResponse {
             this.closed = closed;
             this.bankAccount = bankAccount;
             this.leaderContact = leaderContact;
-        }
-    }
-
-    @Getter
-    private static class ManagerData {
-        private Long id;
-        private String contact;
-        private String nickname;
-
-
-        private ManagerData(Account manager) {
-            this.id = manager.getId();
-            this.contact = manager.getContact();
-            this.nickname = manager.getNickname();
         }
     }
 }
