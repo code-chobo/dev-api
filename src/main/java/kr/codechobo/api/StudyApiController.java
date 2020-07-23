@@ -48,6 +48,11 @@ public class StudyApiController {
         return StudyResponse.build(study);
     }
 
-//    @DeleteMapping("/study/{")
+    @DeleteMapping("/study/{studyId}/member")
+    public ResponseEntity<ApiResult> cancelJoinStudy(@PathVariable Long studyId,
+                                                     @CurrentAccount Account account) {
+        Long studyAccountId = studyService.cancelJoin(studyId, account);
+        return Result.ok(ApiResult.blank().add("studyAccountId", studyAccountId));
+    }
 
 }
