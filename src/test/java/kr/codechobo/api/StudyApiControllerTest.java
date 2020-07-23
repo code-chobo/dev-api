@@ -22,12 +22,11 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * @author : Eunmo Hong
@@ -125,7 +124,23 @@ class StudyApiControllerTest {
         given(studyService.findStudyById(anyLong())).willReturn(createStudy());
         mockMvc.perform(get("/api/study/{studyId}", 1L))
                 .andDo(print());
+    }
 
+    @DisplayName("스터디 탈퇴 ")
+    @Test
+    void serviceCancelJoinStudy() throws Exception {
+        Account account = createAccount();
+
+        String token = "!@#$%^&*";
+        given(tokenManager.createToken(account)).willReturn(token);
+        given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
+        given(studyService.cancelJoin(anyLong(), any(Account.class))).willReturn(1L);
+
+        mockMvc.perform(delete("/api/study/{studyId}/member", 1L)
+                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("studyAccountId").value(1L));
     }
 
     private CreateStudyRequest createStudyRequest(int numberOfMinEnrolment, int numberOfMaxEnrolment) {
