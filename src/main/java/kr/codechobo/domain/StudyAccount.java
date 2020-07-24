@@ -9,11 +9,11 @@ import javax.persistence.*;
  * @since : 2020/07/21
  */
 
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class StudyAccount {
+public class StudyAccount extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_account_id")

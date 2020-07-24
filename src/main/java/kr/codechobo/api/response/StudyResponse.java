@@ -31,6 +31,7 @@ public class StudyResponse {
                 .numberOfCurrentEnrolment(study.getNumberOfCurrentEnrolment())
                 .closed(study.isClosed())
                 .bankAccount(study.getBankAccount())
+                .createdBy(study.getCreatedBy().getNickname())
                 .build();
 
 
@@ -53,9 +54,10 @@ public class StudyResponse {
         private boolean closed;
         private String bankAccount;
         private String leaderContact;
+        private String createdBy;
 
         @Builder
-        public StudyData(Long id, String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, int numberOfCurrentEnrolment, boolean closed, String bankAccount, String leaderContact) {
+        public StudyData(Long id, String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, int numberOfCurrentEnrolment, boolean closed, String bankAccount, String leaderContact, String createdBy) {
             this.id = id;
             this.title = title;
             this.description = description;
@@ -68,6 +70,7 @@ public class StudyResponse {
             this.closed = closed;
             this.bankAccount = bankAccount;
             this.leaderContact = leaderContact;
+            this.createdBy = createdBy;
         }
     }
 }

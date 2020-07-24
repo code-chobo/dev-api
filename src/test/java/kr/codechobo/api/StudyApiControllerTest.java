@@ -1,6 +1,7 @@
 package kr.codechobo.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.codechobo.account.AccountAdapter;
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.api.request.CreateStudyRequest;
 import kr.codechobo.api.request.JoinStudyRequest;
@@ -12,21 +13,31 @@ import kr.codechobo.study.StudyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author : Eunmo Hong
@@ -118,13 +129,6 @@ class StudyApiControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("스터디 단 건 조회")
-    @Test
-    void findStudyById() throws Exception{
-        given(studyService.findStudyById(anyLong())).willReturn(createStudy());
-        mockMvc.perform(get("/api/study/{studyId}", 1L))
-                .andDo(print());
-    }
 
     @DisplayName("스터디 탈퇴 ")
     @Test
