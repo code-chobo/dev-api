@@ -7,6 +7,7 @@ import kr.codechobo.domain.Study;
 import kr.codechobo.domain.StudyAccount;
 import kr.codechobo.domain.StudyRole;
 import kr.codechobo.study.exception.NotFoundStudyAccountException;
+import kr.codechobo.study.exception.NotFoundStudyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

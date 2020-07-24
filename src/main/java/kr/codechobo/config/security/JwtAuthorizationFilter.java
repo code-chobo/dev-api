@@ -2,6 +2,7 @@ package kr.codechobo.config.security;
 
 import kr.codechobo.account.AccountAdapter;
 import kr.codechobo.account.AccountRepository;
+import kr.codechobo.account.exception.NotFoundAccountException;
 import kr.codechobo.domain.Account;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,7 +45,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
         Long accountId = tokenManager.extractAccountIdFromToken(token);
-        Account account = accountRepository.findById(accountId).orElseThrow(RuntimeException::new);
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new NotFoundAccountException(accountId));
         UsernamePasswordAuthenticationToken usernamePasswordToken = new UsernamePasswordAuthenticationToken(new AccountAdapter(account), account.getPassword(), List.of(new SimpleGrantedAuthority(account.getRole().toString())));
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordToken);
 
