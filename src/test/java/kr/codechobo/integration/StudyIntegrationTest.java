@@ -12,23 +12,30 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
+
 
 /**
  * @author : Eunmo Hong
@@ -39,7 +46,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
+@AutoConfigureRestDocs
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 public class StudyIntegrationTest {
+
+    @RegisterExtension
+    RestDocumentationExtension restDocumentation = new RestDocumentationExtension();
 
     @Autowired
     WebTestClient client;
@@ -61,8 +73,14 @@ public class StudyIntegrationTest {
 
     String token;
 
+
     @BeforeEach
-    void setUp() {
+    public void setUp(ApplicationContext context, RestDocumentationContextProvider restDocumentation) {
+        this.client = WebTestClient.bindToApplicationContext(context)
+                .configureClient()
+                .filter(documentationConfiguration(restDocumentation))
+                .build();
+
         JoinAccountRequest joinRequest = new JoinAccountRequest("email@email.com", "tester", "123456", "123456");
         Long join = accountService.join(joinRequest);
         token = tokenManager.createToken(accountRepository.findById(join).get());
@@ -102,30 +120,30 @@ public class StudyIntegrationTest {
     @DisplayName("스터디 단건 조회")
     @Test
     void getStudy() {
-        EntityExchangeResult<byte[]> entityExchangeResult = client.get()
+        client.get()
                 .uri("/api/study/1")
                 .exchange()
                 .expectBody()
-                .jsonPath("$.id").exists()
-                .jsonPath("$.title").exists()
-                .jsonPath("$.description").exists()
-                .jsonPath("$.location").exists()
-                .jsonPath("$.startDate").exists()
-                .jsonPath("$.endDate").exists()
+                .consumeWith(document("find-study",
+                        responseFields(
+                                fieldWithPath("$.id").description("study의 id"),
+                                fieldWithPath("$.title").description("study의 제목")
+                        )
+                ));
 
     }
 
     private CreateStudyRequest getCreateStudyRequest() {
         return CreateStudyRequest.builder()
-                    .title("스프링 스터디")
-                    .description("스프링을 더 깊게 알아갑시다")
-                    .startDate(LocalDateTime.of(2020, 7, 29, 0, 0))
-                    .endDate(LocalDateTime.of(2020, 8, 1, 0, 0))
-                    .numberOfMaxEnrolment(10)
-                    .numberOfMinEnrolment(0)
-                    .leaderContact("010-1234-1234")
-                    .bankAccount("국민 101")
-                    .location("서울시 강남구")
-                    .build();
+                .title("스프링 스터디")
+                .description("스프링을 더 깊게 알아갑시다")
+                .startDate(LocalDateTime.of(2020, 7, 29, 0, 0))
+                .endDate(LocalDateTime.of(2020, 8, 1, 0, 0))
+                .numberOfMaxEnrolment(10)
+                .numberOfMinEnrolment(0)
+                .leaderContact("010-1234-1234")
+                .bankAccount("국민 101")
+                .location("서울시 강남구")
+                .build();
     }
 }
