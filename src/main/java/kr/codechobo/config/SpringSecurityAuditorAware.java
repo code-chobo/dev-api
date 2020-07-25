@@ -1,5 +1,6 @@
 package kr.codechobo.config;
 
+import kr.codechobo.account.AccountAdapter;
 import kr.codechobo.domain.Account;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<Account> {
                 .map(SecurityContext::getAuthentication)
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getPrincipal)
-                .map(Account.class::cast);
+                .map(AccountAdapter.class::cast)
+                .map(AccountAdapter::getAccount);
     }
 }

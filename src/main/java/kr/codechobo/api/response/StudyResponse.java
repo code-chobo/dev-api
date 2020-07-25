@@ -6,6 +6,7 @@ import kr.codechobo.domain.Account;
 import kr.codechobo.domain.Study;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,8 @@ public class StudyResponse {
                 .closed(study.isClosed())
                 .bankAccount(study.getBankAccount())
                 .createdBy(study.getCreatedBy().getNickname())
+                .createdDate(study.getCreatedDate())
+                .modifiedDate(study.getModifiedDate())
                 .build();
 
 
@@ -40,6 +43,7 @@ public class StudyResponse {
         return Result.ok(result);
     }
 
+    @ToString
     @Getter
     private static class StudyData {
         private Long id;
@@ -55,9 +59,11 @@ public class StudyResponse {
         private String bankAccount;
         private String leaderContact;
         private String createdBy;
+        private LocalDateTime createdDate;
+        private LocalDateTime modifiedDate;
 
         @Builder
-        public StudyData(Long id, String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, int numberOfCurrentEnrolment, boolean closed, String bankAccount, String leaderContact, String createdBy) {
+        public StudyData(Long id, String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, int numberOfCurrentEnrolment, boolean closed, String bankAccount, String leaderContact, String createdBy, LocalDateTime createdDate, LocalDateTime modifiedDate) {
             this.id = id;
             this.title = title;
             this.description = description;
@@ -71,6 +77,8 @@ public class StudyResponse {
             this.bankAccount = bankAccount;
             this.leaderContact = leaderContact;
             this.createdBy = createdBy;
+            this.createdDate = createdDate;
+            this.modifiedDate = modifiedDate;
         }
     }
 }
