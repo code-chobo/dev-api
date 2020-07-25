@@ -25,7 +25,6 @@ public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenManager tokenManager;
 
     public Account findAccountById(Long id) {
         return accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id));

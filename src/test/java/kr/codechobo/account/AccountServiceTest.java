@@ -40,7 +40,7 @@ class AccountServiceTest {
 
     @BeforeEach
     void setUp() {
-        accountService = new AccountService(accountRepository, passwordEncoder,tokenManager);
+        accountService = new AccountService(accountRepository, passwordEncoder);
     }
 
 

@@ -17,11 +17,17 @@ import java.util.Optional;
 public class SpringSecurityAuditorAware implements AuditorAware<Account> {
     @Override
     public Optional<Account> getCurrentAuditor() {
-        return Optional.ofNullable(SecurityContextHolder.getContext())
+        Object principal = Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getPrincipal)
-                .map(AccountAdapter.class::cast)
-                .map(AccountAdapter::getAccount);
+                .orElseThrow(RuntimeException::new);
+
+        if(principal instanceof String) {
+            return Optional.empty();
+        }
+
+        AccountAdapter adapter = (AccountAdapter) principal;
+        return Optional.of(adapter.getAccount());
     }
 }
