@@ -2,9 +2,12 @@ package kr.codechobo.api;
 
 import kr.codechobo.account.AccountAdapter;
 import kr.codechobo.account.CurrentAccount;
+import kr.codechobo.api.result.ApiResult;
+import kr.codechobo.api.result.Result;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,5 +38,10 @@ public class SampleApiController {
     public String infoAdminAccount(@CurrentAccount Account account) {
         log.info(account.toString());
         return "ADMIN ACCOUNT";
+    }
+
+    @GetMapping("/sample")
+    public ResponseEntity<ApiResult> sample() {
+        return Result.ok(ApiResult.message("OK"));
     }
 }

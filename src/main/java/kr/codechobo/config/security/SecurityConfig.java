@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] POST_EXCLUDE_URL = {"/api/account", "/login"};
     private static final String[] GET_EXCLUDE_URL = {"/api/study/*"};
-    private static final String[] EXCLUDE_URL = {"/api/info"};
+    private static final String[] EXCLUDE_URL = {"/api/sample"};
 
     private final TokenManager tokenManager;
     private final AccountRepository accountRepository;
@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, POST_EXCLUDE_URL).permitAll()
                 .antMatchers(HttpMethod.GET, GET_EXCLUDE_URL).permitAll()
+                .antMatchers(EXCLUDE_URL).permitAll()
                 .anyRequest().authenticated();
 
         http
