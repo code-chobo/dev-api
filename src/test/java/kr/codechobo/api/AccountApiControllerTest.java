@@ -5,7 +5,7 @@ import kr.codechobo.account.AccountRepository;
 import kr.codechobo.account.AccountService;
 import kr.codechobo.account.exception.ExistsEmailException;
 import kr.codechobo.api.request.JoinAccountRequest;
-import kr.codechobo.api.validator.JoinRequestValidator;
+import kr.codechobo.api.validator.JoinAccountRequestValidator;
 import kr.codechobo.config.security.TokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ class AccountApiControllerTest {
     AccountService accountService;
 
     @MockBean
-    JoinRequestValidator joinRequestValidator;
+    JoinAccountRequestValidator joinAccountRequestValidator;
 
     @MockBean
     AccountRepository accountRepository;
@@ -60,7 +60,7 @@ class AccountApiControllerTest {
     @Test
     void join() throws Exception {
         JoinAccountRequest dto = new JoinAccountRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
-        when(joinRequestValidator.supports(any())).thenReturn(true);
+        when(joinAccountRequestValidator.supports(any())).thenReturn(true);
         mockMvc.perform(post("/api/account")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
@@ -72,8 +72,8 @@ class AccountApiControllerTest {
     @Test
     void join_email_fail() throws Exception {
         JoinAccountRequest dto = new JoinAccountRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
-        when(joinRequestValidator.supports(any())).thenReturn(true);
-        doThrow(ExistsEmailException.class).when(joinRequestValidator).validate(any(), any());
+        when(joinAccountRequestValidator.supports(any())).thenReturn(true);
+        doThrow(ExistsEmailException.class).when(joinAccountRequestValidator).validate(any(), any());
 
         mockMvc.perform(post("/api/account")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -86,8 +86,8 @@ class AccountApiControllerTest {
     @Test
     void join_nickname_fail() throws Exception {
         JoinAccountRequest dto = new JoinAccountRequest("email@email.com", "gracelove", "passwordpassword", "passwordpassword");
-        when(joinRequestValidator.supports(any())).thenReturn(true);
-        doThrow(ExistsEmailException.class).when(joinRequestValidator).validate(any(), any());
+        when(joinAccountRequestValidator.supports(any())).thenReturn(true);
+        doThrow(ExistsEmailException.class).when(joinAccountRequestValidator).validate(any(), any());
 
         mockMvc.perform(post("/api/account")
                     .contentType(MediaType.APPLICATION_JSON)

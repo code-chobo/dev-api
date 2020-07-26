@@ -16,7 +16,7 @@ import org.springframework.validation.Validator;
 
 @RequiredArgsConstructor
 @Component
-public class JoinRequestValidator implements Validator {
+public class JoinAccountRequestValidator implements Validator {
 
     private final AccountRepository accountRepository;
 

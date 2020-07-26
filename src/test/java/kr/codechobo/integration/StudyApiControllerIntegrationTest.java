@@ -39,23 +39,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockMvcTest
 public class StudyApiControllerIntegrationTest {
 
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    StudyService studyService;
-
-    @Autowired
-    AccountRepository accountRepository;
-
-    @Autowired
-    StudyRepository studyRepository;
-
-    @Autowired
-    StudyAccountRepository studyAccountRepository;
+    @Autowired MockMvc mockMvc;
+    @Autowired ObjectMapper objectMapper;
+    @Autowired StudyService studyService;
+    @Autowired AccountRepository accountRepository;
+    @Autowired StudyRepository studyRepository;
+    @Autowired StudyAccountRepository studyAccountRepository;
 
     @DisplayName("스터디 만들기. 성공")
     @WithAccount("grace")
@@ -105,6 +94,22 @@ public class StudyApiControllerIntegrationTest {
 
         mockMvc.perform(get("/api/study/{studyId}", studyId))
                 .andDo(print());
+    }
+
+    @DisplayName("startDate가 endDate보다 빠르면 4xx에러")
+    @Test
+    @WithAccount("tester")
+    void shouldStartDateBeforeThanEndDate() throws Exception {
+        CreateStudyRequest request = CreateStudyRequest.builder()
+                .startDate(LocalDateTime.of(2020, 2, 2, 0, 0))
+                .endDate(LocalDateTime.of(2020, 2, 1, 0,0))
+                .build();
+
+        mockMvc.perform(post("/api/study")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
     }
 
     @DisplayName("Accept 해줘야 currentEnrolment 증가.")

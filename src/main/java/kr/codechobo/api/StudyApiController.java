@@ -6,6 +6,7 @@ import kr.codechobo.api.request.JoinStudyRequest;
 import kr.codechobo.api.response.StudyResponse;
 import kr.codechobo.api.result.ApiResult;
 import kr.codechobo.api.result.Result;
+import kr.codechobo.api.validator.CreateStudyRequestValidator;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.Study;
 import kr.codechobo.study.StudyService;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,7 +28,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class StudyApiController {
 
+    private final CreateStudyRequestValidator createStudyRequestValidator;
     private final StudyService studyService;
+
+    @InitBinder("createStudyRequest")
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(createStudyRequestValidator);
+    }
 
     @PostMapping("/study")
     public ResponseEntity<ApiResult> createStudy(@RequestBody @Validated CreateStudyRequest createStudyRequest,

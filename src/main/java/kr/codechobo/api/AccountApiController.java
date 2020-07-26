@@ -4,7 +4,7 @@ import kr.codechobo.account.AccountService;
 import kr.codechobo.api.request.JoinAccountRequest;
 import kr.codechobo.api.result.ApiResult;
 import kr.codechobo.api.result.Result;
-import kr.codechobo.api.validator.JoinRequestValidator;
+import kr.codechobo.api.validator.JoinAccountRequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.*;
 public class AccountApiController {
 
     private final AccountService accountService;
-    private final JoinRequestValidator joinRequestValidator;
+    private final JoinAccountRequestValidator joinAccountRequestValidator;
 
     @InitBinder("joinAccountRequest")
     public void initBinder(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(joinRequestValidator);
+        webDataBinder.addValidators(joinAccountRequestValidator);
     }
 
     @PostMapping("/account")

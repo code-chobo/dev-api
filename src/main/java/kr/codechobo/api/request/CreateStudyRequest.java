@@ -39,9 +39,4 @@ public class CreateStudyRequest {
         this.bankAccount = bankAccount;
         this.leaderContact = leaderContact;
     }
-
-    @AssertTrue
-    public boolean isStartDateBeforeThanEndDate() {
-        return startDate.isBefore(endDate);
-    }
 }
