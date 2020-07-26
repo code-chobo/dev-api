@@ -2,10 +2,7 @@ package kr.codechobo.study;
 
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.config.TestProfileConfiguration;
-import kr.codechobo.domain.Account;
-import kr.codechobo.domain.Study;
-import kr.codechobo.domain.StudyAccount;
-import kr.codechobo.domain.StudyRole;
+import kr.codechobo.domain.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +42,9 @@ class StudyAccountRepositoryTest {
     void findStudyAccountByStudyAndAccountAndCanceledJoinIsFalse() {
         //given
         Account account = Account.builder().build();
-        Study study = Study.builder().build();
+        Study study = Study.builder()
+                .location(new Location(0, 0))
+                .build();
         StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, "국민 111", "010-1111-1111", StudyRole.MEMBER);
 
         accountRepository.save(account);
@@ -65,7 +64,9 @@ class StudyAccountRepositoryTest {
     void findStudyAccountByStudyAndAccountAndCanceledJoinIsTrue() {
         //given
         Account account = Account.builder().email("email@email.com").build();
-        Study study = Study.builder().build();
+        Study study = Study.builder()
+                .location(new Location(0, 0))
+                .build();
         StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, "국민 111", "010-1111-1111", StudyRole.MEMBER);
 
         accountRepository.save(account);

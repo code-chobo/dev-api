@@ -8,11 +8,11 @@ import kr.codechobo.config.MockMvcTest;
 import kr.codechobo.config.TestProfileConfiguration;
 import kr.codechobo.config.WithAccount;
 import kr.codechobo.domain.Account;
+import kr.codechobo.domain.Location;
 import kr.codechobo.domain.StudyAccount;
 import kr.codechobo.study.StudyAccountRepository;
 import kr.codechobo.study.StudyRepository;
 import kr.codechobo.study.StudyService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +98,7 @@ public class StudyApiControllerIntegrationTest {
                 .description("스프링을 더 깊게 공부합시다")
                 .bankAccount("국민은행 111")
                 .leaderContact("010-1111-1111")
-                .location("서울시 강남구")
+                .location(new Location(0,0))
                 .numberOfMinEnrolment(numberOfMinEnrolment)
                 .numberOfMaxEnrolment(numberOfMaxEnrolment)
                 .startDate(LocalDateTime.of(2020, Month.DECEMBER, 1, 0, 0))

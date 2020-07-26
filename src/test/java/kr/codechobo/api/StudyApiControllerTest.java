@@ -1,34 +1,26 @@
 package kr.codechobo.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.codechobo.account.AccountAdapter;
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.api.request.CreateStudyRequest;
 import kr.codechobo.api.request.JoinStudyRequest;
 import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
+import kr.codechobo.domain.Location;
 import kr.codechobo.domain.Study;
 import kr.codechobo.study.StudyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -185,7 +177,7 @@ class StudyApiControllerTest {
                 .id(1L)
                 .title("title")
                 .description("desc")
-                .location("강남구")
+                .location(new Location(0, 0))
                 .startDate(LocalDateTime.of(2020, Month.DECEMBER, 1, 0, 0))
                 .endDate(LocalDateTime.of(2020, Month.DECEMBER, 10, 0, 0))
                 .numberOfMaxEnrolment(2)

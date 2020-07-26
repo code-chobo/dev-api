@@ -25,7 +25,8 @@ public class Study extends BaseEntity{
     @Lob
     private String description;
 
-    private String location;
+    @Embedded
+    private Location location;
 
     private LocalDateTime startDate;
 
@@ -42,7 +43,7 @@ public class Study extends BaseEntity{
     private String bankAccount;
 
     @Builder
-    public Study(Long id, String title, String description, String location,
+    public Study(Long id, String title, String description, Location location,
                  LocalDateTime startDate, LocalDateTime endDate,
                  int numberOfMaxEnrolment, int numberOfMinEnrolment,
                  boolean closed, String bankAccount) {
@@ -62,7 +63,7 @@ public class Study extends BaseEntity{
 
     }
 
-    public static Study createStudy(String title, String description, String location,
+    public static Study createStudy(String title, String description, Location location,
                                     LocalDateTime startDate, LocalDateTime endDate,
                                     int numberOfMaxEnrolment, int numberOfMinEnrolment,
                                     String bankAccount) {

@@ -2,7 +2,7 @@ package kr.codechobo.api.response;
 
 import kr.codechobo.api.result.ApiResult;
 import kr.codechobo.api.result.Result;
-import kr.codechobo.domain.Account;
+import kr.codechobo.domain.Location;
 import kr.codechobo.domain.Study;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class StudyResponse {
         private Long id;
         private String title;
         private String description;
-        private String location;
+        private Location location;
         private LocalDateTime startDate;
         private LocalDateTime endDate;
         private int numberOfMaxEnrolment;
@@ -63,7 +63,7 @@ public class StudyResponse {
         private LocalDateTime modifiedDate;
 
         @Builder
-        public StudyData(Long id, String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, int numberOfCurrentEnrolment, boolean closed, String bankAccount, String leaderContact, String createdBy, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+        public StudyData(Long id, String title, String description, Location location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, int numberOfCurrentEnrolment, boolean closed, String bankAccount, String leaderContact, String createdBy, LocalDateTime createdDate, LocalDateTime modifiedDate) {
             this.id = id;
             this.title = title;
             this.description = description;

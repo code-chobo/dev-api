@@ -2,10 +2,7 @@ package kr.codechobo.study;
 
 import kr.codechobo.api.request.CreateStudyRequest;
 import kr.codechobo.api.request.JoinStudyRequest;
-import kr.codechobo.domain.Account;
-import kr.codechobo.domain.AccountRole;
-import kr.codechobo.domain.Study;
-import kr.codechobo.domain.StudyAccount;
+import kr.codechobo.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -154,7 +151,7 @@ class StudyServiceTest {
     }
 
     private Study createStudy() {
-        return Study.createStudy("title", "desc", "서울시 강남구", LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), 2, 1, "국민 1111");
+        return Study.createStudy("title", "desc", new Location(0, 0), LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), 2, 1, "국민 1111");
     }
 
 

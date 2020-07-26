@@ -1,5 +1,6 @@
 package kr.codechobo.api.request;
 
+import kr.codechobo.domain.Location;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class CreateStudyRequest {
 
     private String title;
     private String description;
-    private String location;
+    private Location location;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int numberOfMaxEnrolment;
@@ -27,7 +28,7 @@ public class CreateStudyRequest {
     private String leaderContact;
 
     @Builder
-    public CreateStudyRequest(String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, String bankAccount, String leaderContact) {
+    public CreateStudyRequest(String title, String description, Location location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, String bankAccount, String leaderContact) {
         this.title = title;
         this.description = description;
         this.location = location;
