@@ -31,8 +31,8 @@ public class StudyApiController {
     @PostMapping("/study")
     public ResponseEntity<ApiResult> createStudy(@RequestBody @Validated CreateStudyRequest createStudyRequest,
                                                  @CurrentAccount Account account) {
-        Long studyId = studyService.createStudy(createStudyRequest, account);
-        return Result.created(ApiResult.blank().add("studyId", studyId));
+        Long studyAccountId = studyService.createStudy(createStudyRequest, account);
+        return Result.created(ApiResult.blank().add("studyAccountId", studyAccountId));
     }
 
     @PostMapping("/study/member")

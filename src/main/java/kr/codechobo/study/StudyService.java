@@ -39,7 +39,7 @@ public class StudyService {
     }
 
     public Long joinStudy(JoinStudyRequest request, Account account) {
-        Study study = studyRepository.findById(request.getStudyId()).orElseThrow(RuntimeException::new);
+        Study study = studyRepository.findById(request.getStudyId()).orElseThrow(() -> new NotFoundStudyException(request.getStudyId()));
         StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, request.getRefundBankAccount(), request.getStudentContact(), StudyRole.MEMBER);
 
         StudyAccount savedStudyAccount = studyAccountRepository.save(studyAccount);

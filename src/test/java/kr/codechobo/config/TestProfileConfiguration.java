@@ -4,14 +4,14 @@ import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
@@ -23,6 +23,13 @@ import java.util.Optional;
 @Profile("test")
 @EnableJpaAuditing(auditorAwareRef = "testAuditorProvider")
 public class TestProfileConfiguration {
+
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
+        jsonConverter.setDefaultCharset(StandardCharsets.UTF_8);
+        return jsonConverter;
+    }
 
     @Bean
     public AuditorAware<String> testAuditorProvider() {

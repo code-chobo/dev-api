@@ -8,11 +8,16 @@ import kr.codechobo.config.MockMvcTest;
 import kr.codechobo.config.TestProfileConfiguration;
 import kr.codechobo.config.WithAccount;
 import kr.codechobo.domain.Account;
+import kr.codechobo.domain.StudyAccount;
+import kr.codechobo.study.StudyAccountRepository;
+import kr.codechobo.study.StudyRepository;
 import kr.codechobo.study.StudyService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -45,6 +50,12 @@ public class StudyApiControllerIntegrationTest {
     AccountRepository accountRepository;
 
     @Autowired
+    StudyRepository studyRepository;
+
+    @Autowired
+    StudyAccountRepository studyAccountRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @DisplayName("스터디 만들기. 성공")
@@ -54,10 +65,30 @@ public class StudyApiControllerIntegrationTest {
         CreateStudyRequest request = createStudyRequest(0, 10);
         Account account = accountRepository.findByNickname("grace").get();
 
-        Long studyId = studyService.createStudy(request, account);
+        Long studyAccountId = studyService.createStudy(request, account);
 
+        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountId).get();
+        Long studyId = studyAccount.getStudy().getId();
 
         mockMvc.perform(get("/api/study/{studyId}", studyId))
+                .andDo(print());
+    }
+
+    @DisplayName("스터디 참가 성공")
+    @WithAccount("joiner")
+    @Test
+    void joinStudyTest() throws Exception {
+        Account account = accountRepository.findByNickname("joiner").get();
+
+        CreateStudyRequest request = createStudyRequest(10, 12);
+        Long studyAccountId = studyService.createStudy(request, account);
+
+        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountId).get();
+        Long studyId = studyAccount.getStudy().getId();
+
+        mockMvc.perform(post("/api/study/member")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(joinStudyRequest(studyId))))
                 .andDo(print());
     }
 
@@ -75,7 +106,7 @@ public class StudyApiControllerIntegrationTest {
                 .build();
     }
 
-    private JoinStudyRequest joinStudyRequest() {
-        return new JoinStudyRequest(0L, "국민은행 1111-1111", "010-1234-1234");
+    private JoinStudyRequest joinStudyRequest(Long studyId) {
+        return new JoinStudyRequest(studyId, "국민은행 1111-1111", "010-1234-1234");
     }
 }
