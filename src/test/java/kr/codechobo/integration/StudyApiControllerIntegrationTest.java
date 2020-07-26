@@ -27,6 +27,8 @@ import java.time.Month;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author : Eunmo Hong
@@ -63,15 +65,13 @@ public class StudyApiControllerIntegrationTest {
     @Test
     void createStudyTest() throws Exception {
         CreateStudyRequest request = createStudyRequest(0, 10);
-        Account account = accountRepository.findByNickname("grace").get();
 
-        Long studyAccountId = studyService.createStudy(request, account);
-
-        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountId).get();
-        Long studyId = studyAccount.getStudy().getId();
-
-        mockMvc.perform(get("/api/study/{studyId}", studyId))
-                .andDo(print());
+        mockMvc.perform(post("/api/study")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.studyAccountId").exists());
     }
 
     @DisplayName("스터디 참가 성공")
@@ -89,6 +89,24 @@ public class StudyApiControllerIntegrationTest {
         mockMvc.perform(post("/api/study/member")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(joinStudyRequest(studyId))))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.studyAccountId").exists());
+    }
+
+    @DisplayName("스터디 단건 조회")
+    @Test
+    @WithAccount("tester")
+    void findOneStudyTest() throws Exception {
+        Account account = accountRepository.findByNickname("tester").get();
+
+        CreateStudyRequest request = createStudyRequest(10, 12);
+        Long studyAccountId = studyService.createStudy(request, account);
+
+        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountId).get();
+        Long studyId = studyAccount.getStudy().getId();
+
+        mockMvc.perform(get("/api/study/{studyId}", studyId))
                 .andDo(print());
     }
 
