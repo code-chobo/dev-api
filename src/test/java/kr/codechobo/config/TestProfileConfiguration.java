@@ -25,7 +25,7 @@ import java.util.Optional;
 public class TestProfileConfiguration {
 
     @Bean
-    public AuditorAware<Account> testAuditorProvider() {
+    public AuditorAware<String> testAuditorProvider() {
 
         Account account = Account.builder()
                 .nickname("TEST_AUDITOR")
@@ -34,7 +34,7 @@ public class TestProfileConfiguration {
                 .password("11111111")
                 .build();
 
-        return () -> Optional.of(account);
+        return () -> Optional.of(account.getEmail());
     }
 
     @Bean

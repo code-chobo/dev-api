@@ -3,9 +3,11 @@ package kr.codechobo.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.codechobo.api.request.JoinAccountRequest;
 import kr.codechobo.config.MockMvcTest;
+import kr.codechobo.config.TestProfileConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since : 2020/07/26
  */
 
+@Import(TestProfileConfiguration.class)
 @MockMvcTest
 public class AccountApiControllerIntegrationTest {
 

@@ -14,20 +14,21 @@ import java.util.Optional;
  * @since : 2020/07/25
  */
 
-public class SpringSecurityAuditorAware implements AuditorAware<Account> {
+public class SpringSecurityAuditorAware implements AuditorAware<String> {
     @Override
-    public Optional<Account> getCurrentAuditor() {
+    public Optional<String> getCurrentAuditor() {
         Object principal = Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getPrincipal)
                 .orElseThrow(RuntimeException::new);
 
-        if(principal instanceof String) {
+        String createdBy = (String) principal;
+
+        if(createdBy.equals("anonymous")) {
             return Optional.empty();
         }
 
-        AccountAdapter adapter = (AccountAdapter) principal;
-        return Optional.of(adapter.getAccount());
+        return Optional.of(createdBy);
     }
 }

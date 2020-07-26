@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @ActiveProfiles("test")
 @Transactional
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public @interface MockMvcTest {
 }

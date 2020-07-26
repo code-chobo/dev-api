@@ -32,7 +32,7 @@ public class StudyResponse {
                 .numberOfCurrentEnrolment(study.getNumberOfCurrentEnrolment())
                 .closed(study.isClosed())
                 .bankAccount(study.getBankAccount())
-                .createdBy(study.getCreatedBy().getNickname())
+                .createdBy(study.getCreatedBy())
                 .createdDate(study.getCreatedDate())
                 .modifiedDate(study.getModifiedDate())
                 .build();

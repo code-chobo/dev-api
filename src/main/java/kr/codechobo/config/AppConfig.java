@@ -23,7 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class AppConfig {
 
     @Bean
-    public AuditorAware<Account> auditorProvider() {
+    public AuditorAware<String> auditorProvider() {
         return new SpringSecurityAuditorAware();
     }
 
