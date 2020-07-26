@@ -42,6 +42,13 @@ public class StudyApiController {
         return Result.ok(ApiResult.blank().add("studyAccountId", studyAccountId));
     }
 
+    @PutMapping("/study/member/{studyAccountId}")
+    public ResponseEntity<ApiResult> acceptJoinStudy(@CurrentAccount Account account,
+                                                     @PathVariable Long studyAccountId) {
+        studyService.acceptJoin(account, studyAccountId);
+        return Result.ok(ApiResult.message("SUCCESS"));
+    }
+
     @GetMapping("/study/{studyId}")
     public ResponseEntity<ApiResult> findStudy(@PathVariable Long studyId) {
         Study study = studyService.findStudyById(studyId);

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.when;
  * @since : 2020/07/16
  */
 
+@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 class AccountServiceTest {
 

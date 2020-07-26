@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -16,9 +17,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.verify;
  * @since : 2020/07/21
  */
 
+@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 class StudyServiceTest {
 
@@ -48,7 +50,7 @@ class StudyServiceTest {
         //given
         CreateStudyRequest request = createStudyRequest(1, 2);
         Account account = createAccountManager();
-        given(studyRepository.save(any(Study.class))).willReturn(createStudy());
+        given(studyRepository.save(any(Study.class))).willReturn(createStudy(2,1));
         given(studyAccountRepository.save(any(StudyAccount.class))).willReturn(createStudyAccountRoleManager());
 
         //when
@@ -63,22 +65,23 @@ class StudyServiceTest {
     @Test
     void createStudyService_with_numberOfCurrentEnrolment_increase() {
         //given
-        Study study = createStudy();
+        Study study = createStudy(2,1);
         given(studyRepository.save(any(Study.class))).willReturn(study);
-        given(studyAccountRepository.save(any(StudyAccount.class))).willReturn(createStudyAccountRoleManager());
+        StudyAccount studyAccountRoleManager = createStudyAccountRoleManager();
+        given(studyAccountRepository.save(any(StudyAccount.class))).willReturn(studyAccountRoleManager);
 
         //when
         studyService.createStudy(createStudyRequest(1, 2), createAccountManager());
 
         //then
-        assertEquals(1, study.getNumberOfCurrentEnrolment());
+        assertEquals(1, studyAccountRoleManager.getStudy().getNumberOfCurrentEnrolment());
     }
 
     @DisplayName("service.joinStudy(...) 할 때 studyAccountRepository에 저장된다")
     @Test
     void joinStudyService() {
         //given
-        given(studyRepository.findById(any())).willReturn(Optional.of(createStudy()));
+        given(studyRepository.findById(any())).willReturn(Optional.of(createStudy(2,1)));
         given(studyAccountRepository.save(any(StudyAccount.class))).willReturn(createStudyAccountRoleMember());
         //when
         studyService.joinStudy(joinStudyRequest(), createAccountMember());
@@ -93,7 +96,7 @@ class StudyServiceTest {
     @Test
     void findStudyByIdService() {
         //given
-        given(studyRepository.findById(anyLong())).willReturn(Optional.of(createStudy()));
+        given(studyRepository.findById(anyLong())).willReturn(Optional.of(createStudy(2,1)));
 
         //when
         Study study = studyService.findStudyById(1L);
@@ -103,55 +106,24 @@ class StudyServiceTest {
         verify(studyRepository).findById(1L);
     }
 
-    @DisplayName("service.joinStudy 하면 study의 numberOfCurrentEnrollment 증가.")
-    @Test
-    void increaseNumberOfCurrentEnrollment() {
-        //given
-        Study study = createStudy();
-        given(studyRepository.findById(any())).willReturn(Optional.of(study));
-        given(studyAccountRepository.save(any(StudyAccount.class))).willReturn(createStudyAccountRoleManager());
-
-        //when
-        studyService.joinStudy(joinStudyRequest(), createAccountMember());
-
-        //then
-        verify(studyAccountRepository).save(any(StudyAccount.class));
-        assertEquals(1, study.getNumberOfCurrentEnrolment());
-    }
-
-    @DisplayName("service.canceledJoin 하면 study의 numberOfCurrentEnrollment 감소.")
-    @Test
-    void decreaseNumberOfCurrentEnrollment() {
-        //given
-        Study study = createStudy();
-        given(studyRepository.findById(any())).willReturn(Optional.of(study));
-        StudyAccount studyAccount = createStudyAccountRoleMember();
-        given(studyAccountRepository.findStudyAccountByStudyAndAccountAndCanceledJoinIsFalse(any(), any())).willReturn(Optional.of(studyAccount));
-        Account account = createAccountMember();
-
-        //when
-        studyService.cancelJoin(anyLong(), account);
-
-        //then
-        assertEquals(0, study.getNumberOfCurrentEnrolment());
-    }
-
     private StudyAccount createStudyAccountRoleMember() {
         return StudyAccount.builder()
-                .study(createStudy())
+                .study(createStudy(2, 1))
+                .account(createAccountMember())
                 .id(1L)
                 .build();
     }
 
     private StudyAccount createStudyAccountRoleManager() {
         return StudyAccount.builder()
-                .study(createStudy())
+                .study(createStudy(2, 1))
+                .account(createAccountManager())
                 .id(2L)
                 .build();
     }
 
-    private Study createStudy() {
-        return Study.createStudy("title", "desc", new Location(0, 0), LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), 2, 1, "국민 1111");
+    private Study createStudy(int maxEnrolment, int minEnrolment) {
+        return Study.createStudy("title", "desc", new Location(0, 0), LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), maxEnrolment, minEnrolment, "국민 1111");
     }
 
 

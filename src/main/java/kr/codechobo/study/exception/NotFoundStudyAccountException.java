@@ -6,7 +6,7 @@ package kr.codechobo.study.exception;
  */
 
 public class NotFoundStudyAccountException extends RuntimeException {
-    public NotFoundStudyAccountException(Long accountId) {
-        super("스터디에 참여중이 아닙니다 accountId : " + accountId);
+    public NotFoundStudyAccountException(Long studyAccountId) {
+        super("스터디에 참여중이 아닙니다 studyAccountId : " + studyAccountId);
     }
 }

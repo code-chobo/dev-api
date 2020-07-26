@@ -34,6 +34,7 @@ public class StudyService {
 
         StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, savedStudy, null, null, StudyRole.MANAGER);
         StudyAccount savedStudyAccount = studyAccountRepository.save(studyAccount);
+        savedStudyAccount.acceptJoin();
 
         return savedStudyAccount.getId();
     }
@@ -43,6 +44,7 @@ public class StudyService {
         StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, request.getRefundBankAccount(), request.getStudentContact(), StudyRole.MEMBER);
 
         StudyAccount savedStudyAccount = studyAccountRepository.save(studyAccount);
+
         return savedStudyAccount.getId();
     }
 
@@ -58,4 +60,12 @@ public class StudyService {
     }
 
 
+    public void acceptJoin(Account account, Long studyAccountId) {
+        StudyAccount manager = studyAccountRepository.findByAccountId(account.getId()).orElseThrow(() -> new NotFoundStudyAccountException(studyAccountId));
+        if(!manager.isManager()) {
+            throw new IllegalStateException("참여를 수락할 권한이 없습니다.");
+        }
+        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountId).orElseThrow(() -> new NotFoundStudyAccountException(studyAccountId));
+        studyAccount.acceptJoin();
+    }
 }

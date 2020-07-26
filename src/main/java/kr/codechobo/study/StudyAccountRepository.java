@@ -15,4 +15,6 @@ import java.util.Optional;
 public interface StudyAccountRepository extends JpaRepository<StudyAccount, Long> {
     //todo : queurydsl로 리팩토링 필요.
     Optional<StudyAccount> findStudyAccountByStudyAndAccountAndCanceledJoinIsFalse(Study study, Account account);
+
+    Optional<StudyAccount> findByAccountId(Long accountId);
 }

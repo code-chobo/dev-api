@@ -9,6 +9,7 @@ import kr.codechobo.config.TestProfileConfiguration;
 import kr.codechobo.config.WithAccount;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.Location;
+import kr.codechobo.domain.Study;
 import kr.codechobo.domain.StudyAccount;
 import kr.codechobo.study.StudyAccountRepository;
 import kr.codechobo.study.StudyRepository;
@@ -18,14 +19,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,9 +56,6 @@ public class StudyApiControllerIntegrationTest {
 
     @Autowired
     StudyAccountRepository studyAccountRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @DisplayName("스터디 만들기. 성공")
     @WithAccount("grace")
@@ -108,6 +105,36 @@ public class StudyApiControllerIntegrationTest {
 
         mockMvc.perform(get("/api/study/{studyId}", studyId))
                 .andDo(print());
+    }
+
+    @Test
+    @WithAccount("manager")
+    void test() throws Exception {
+        //given
+        Account managerAccount = accountRepository.findByNickname("manager").get();
+        CreateStudyRequest request = createStudyRequest(1, 2);
+        Long studyAccountManagerId = studyService.createStudy(request, managerAccount);
+        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountManagerId).get();
+
+        Account joiner = Account.builder()
+                .email("email@email.com")
+                .nickname("manager")
+                .build();
+        accountRepository.save(joiner);
+
+        JoinStudyRequest joinRequest = new JoinStudyRequest(studyAccount.getStudy().getId(), null, null);
+
+        Long joinerStudyAccountId = studyService.joinStudy(joinRequest, joiner);
+
+        //when
+        mockMvc.perform(put("/api/study/member/{studyAccountId}", joinerStudyAccountId))
+                .andDo(print())
+                .andExpect(jsonPath("$.message").value("SUCCESS"));
+
+        //then
+        Study study = studyAccount.getStudy();
+        assertEquals(2, study.getNumberOfCurrentEnrolment());
+
     }
 
     private CreateStudyRequest createStudyRequest(int numberOfMinEnrolment, int numberOfMaxEnrolment) {

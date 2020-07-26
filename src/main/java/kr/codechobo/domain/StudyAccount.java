@@ -33,6 +33,8 @@ public class StudyAccount extends BaseEntity{
 
     private boolean canceledJoin;
 
+    private boolean accepted;
+
     @Enumerated(EnumType.STRING)
     private StudyRole studyRole;
 
@@ -48,7 +50,7 @@ public class StudyAccount extends BaseEntity{
     }
 
     public static StudyAccount CreateStudyAccount(Account account, Study study, String refundBankAccount, String studentContact, StudyRole studyRole) {
-        study.increaseNumberOfCurrentEnrolment();
+
         return StudyAccount.builder()
                 .account(account)
                 .study(study)
@@ -57,6 +59,25 @@ public class StudyAccount extends BaseEntity{
                 .canceledJoin(false)
                 .studyRole(studyRole)
                 .build();
+    }
+
+    public void acceptJoin() {
+        if(study.getNumberOfMaxEnrolment() <= study.getNumberOfCurrentEnrolment()) {
+            throw new OverMaxEnrolmentException(study.getNumberOfMaxEnrolment(), study.getNumberOfCurrentEnrolment());
+        }
+
+        if(accepted) {
+           throw new AlreadyAcceptedException();
+        }
+        accepted = true;
+        study.increaseNumberOfCurrentEnrolment();
+    }
+
+    public void canceledJoin() {
+        if(accepted) {
+            this.study.decreaseNumberOfCurrentEnrolment();
+        }
+        this.canceledJoin = true;
     }
 
     public String changeRefundBankAccount(String refundBankAccount) {
@@ -69,8 +90,8 @@ public class StudyAccount extends BaseEntity{
         return studentContact;
     }
 
-    public void canceledJoin() {
-        this.canceledJoin = true;
-        this.study.decreaseNumberOfCurrentEnrolment();
+
+    public boolean isManager() {
+        return studyRole.equals(StudyRole.MANAGER);
     }
 }
