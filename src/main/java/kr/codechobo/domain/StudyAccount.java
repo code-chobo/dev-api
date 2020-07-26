@@ -1,5 +1,7 @@
 package kr.codechobo.domain;
 
+import kr.codechobo.study.exception.AlreadyAcceptedException;
+import kr.codechobo.study.exception.OverMaxEnrolmentException;
 import lombok.*;
 
 import javax.persistence.*;

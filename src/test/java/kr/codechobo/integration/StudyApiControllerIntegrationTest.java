@@ -107,9 +107,10 @@ public class StudyApiControllerIntegrationTest {
                 .andDo(print());
     }
 
+    @DisplayName("Accept 해줘야 currentEnrolment 증가.")
     @Test
     @WithAccount("manager")
-    void test() throws Exception {
+    void shouldIncreaseEnrolmentWhenAcceptJoinStudy() throws Exception {
         //given
         Account managerAccount = accountRepository.findByNickname("manager").get();
         CreateStudyRequest request = createStudyRequest(1, 2);
@@ -134,7 +135,6 @@ public class StudyApiControllerIntegrationTest {
         //then
         Study study = studyAccount.getStudy();
         assertEquals(2, study.getNumberOfCurrentEnrolment());
-
     }
 
     private CreateStudyRequest createStudyRequest(int numberOfMinEnrolment, int numberOfMaxEnrolment) {
