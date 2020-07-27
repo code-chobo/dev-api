@@ -3,6 +3,7 @@ package kr.codechobo.restdocs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.api.request.CreateStudyRequest;
+import kr.codechobo.api.request.JoinStudyRequest;
 import kr.codechobo.config.MockMvcTest;
 import kr.codechobo.config.WithAccount;
 import kr.codechobo.config.security.TokenManager;
@@ -24,8 +25,7 @@ import java.time.LocalDateTime;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -85,7 +85,7 @@ public class StudyApiRestDocs {
                                 fieldWithPath("endDate").description("스터디 끝나는 날짜"),
                                 fieldWithPath("numberOfMaxEnrolment").description("최대 모집 인원"),
                                 fieldWithPath("numberOfMinEnrolment").description("최소 모집 인원"),
-                                fieldWithPath("bankAccount").description("세마니 비용 등을 입금받을 계좌"),
+                                fieldWithPath("bankAccount").description("세미나 비용 등을 입금받을 계좌"),
                                 fieldWithPath("leaderContact").description("주최자의 연락처")
                         ),
                         responseFields(
@@ -131,6 +131,44 @@ public class StudyApiRestDocs {
                                 fieldWithPath("study.createdBy").description("study 주최자의 메일"),
                                 fieldWithPath("study.createdDate").description("study 모집 글이 쓰여진 시각"),
                                 fieldWithPath("study.modifiedDate").description("study 모집 글이 최종 변경된 시각")
+                        )
+                ));
+    }
+
+    @DisplayName("스터디 참여 취소")
+    @WithAccount("joiner")
+    @Test
+    void cancelJoinStudy() throws Exception {
+        Account accountManager = Account.builder()
+                .nickname("manager")
+                .email("manager@email.com")
+                .build();
+        accountRepository.save(accountManager);
+        Long studyAccountId = studyService.createStudy(createStudyRequest(), accountManager);
+        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountId).get();
+        Study study = studyAccount.getStudy();
+
+        Account accountMember = accountRepository.findByNickname("joiner").get();
+        JoinStudyRequest request = new JoinStudyRequest(study.getId(), "국민 111-111", "010-1234-1234");
+        studyService.joinStudy(request, accountMember);
+
+        String token = tokenManager.createToken(accountMember);
+
+        mockMvc.perform(delete("/api/study/{studyId}/member", study.getId())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+
+                .andDo(document(
+                        "cancel-join-study",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("login시 발급받은 jwt토큰")
+                        ),
+                        pathParameters(
+                                parameterWithName("studyId").description("참여 취소할 study의 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("studyAccountId").description("취소된 studyAccountId")
                         )
                 ));
     }

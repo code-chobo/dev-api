@@ -39,3 +39,9 @@ operation::create-study[snippets='request-fields,request-headers,curl-request,ht
 `GET` 요청을 이용해 스터디를 조회할 수 있다.
 
 operation::find-study[snippets='path-parameters,curl-request,http-request,http-response,response-fields']
+
+[[cancel-join-study]]
+=== 스터디 참여 취소
+`Delete` 요청을 이용해 스터디 참여를 취소할 수 있다.
+
+operation::cancel-join-study[snippets='path-parameters,request-headers,curl-request,http-request,http-response']
