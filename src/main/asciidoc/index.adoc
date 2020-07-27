@@ -7,6 +7,7 @@
 :sectlinks:
 :operation-request-headers-title: 요청 헤더
 :operation-request-fields-title: 요청 필드
+:operation-response-fields-title: 응답 필드
 :operation-curl-request-title: 요청 예시
 :operation-http-request-title: 요청 구조
 :operation-http-response-title: 응답 구조
@@ -37,4 +38,4 @@ operation::create-study[snippets='request-fields,request-headers,curl-request,ht
 === 스터디 단 건 조회
 `GET` 요청을 이용해 스터디를 조회할 수 있다.
 
-operation::find-study[snippets='path-parameters,curl-request,http-request,http-response']
+operation::find-study[snippets='path-parameters,curl-request,http-request,http-response,response-fields']

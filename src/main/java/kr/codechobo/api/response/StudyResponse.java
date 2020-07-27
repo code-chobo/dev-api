@@ -1,5 +1,8 @@
 package kr.codechobo.api.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import kr.codechobo.api.result.ApiResult;
 import kr.codechobo.api.result.Result;
 import kr.codechobo.domain.Location;
@@ -7,6 +10,7 @@ import kr.codechobo.domain.Study;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
@@ -51,7 +55,11 @@ public class StudyResponse {
         private String title;
         private String description;
         private Location location;
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        @JsonFormat(pattern = "yyyy-MM-dd kk:mm")
         private LocalDateTime startDate;
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        @JsonFormat(pattern = "yyyy-MM-dd kk:mm")
         private LocalDateTime endDate;
         private int numberOfMaxEnrolment;
         private int numberOfMinEnrolment;
@@ -60,7 +68,11 @@ public class StudyResponse {
         private String bankAccount;
         private String leaderContact;
         private String createdBy;
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
         private LocalDateTime createdDate;
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
         private LocalDateTime modifiedDate;
 
         @Builder
