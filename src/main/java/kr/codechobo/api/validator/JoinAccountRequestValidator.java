@@ -3,6 +3,7 @@ package kr.codechobo.api.validator;
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.account.exception.ExistsEmailException;
 import kr.codechobo.account.exception.ExistsNicknameException;
+import kr.codechobo.account.exception.PasswordNotMatchException;
 import kr.codechobo.api.request.JoinAccountRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,10 @@ public class JoinAccountRequestValidator implements Validator {
 
         if(existsByNickname) {
             throw new ExistsNicknameException(joinAccountRequest.getNickname());
+        }
+
+        if(!joinAccountRequest.isPasswordMatchConfirm()) {
+            throw new PasswordNotMatchException();
         }
     }
 }

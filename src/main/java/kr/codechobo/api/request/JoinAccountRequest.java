@@ -1,5 +1,6 @@
 package kr.codechobo.api.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -35,6 +36,7 @@ public class JoinAccountRequest {
         this.passwordConfirm = passwordConfirm;
     }
 
+    @JsonIgnore
     @AssertTrue
     public boolean isPasswordMatchConfirm() {
         return password.equals(passwordConfirm);

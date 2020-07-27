@@ -123,7 +123,7 @@ class StudyServiceTest {
     }
 
     private Study createStudy(int maxEnrolment, int minEnrolment) {
-        return Study.createStudy("title", "desc", new Location(0, 0), LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), maxEnrolment, minEnrolment, "국민 1111");
+        return Study.createStudy("title", "desc", new Location(0, 0), LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), maxEnrolment, minEnrolment, "국민 1111", "010-1234-1234");
     }
 
 
