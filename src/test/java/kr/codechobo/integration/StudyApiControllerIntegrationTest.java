@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.time.Month;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -132,6 +132,7 @@ public class StudyApiControllerIntegrationTest {
 
         Long joinerStudyAccountId = studyService.joinStudy(joinRequest, joiner);
 
+        assertEquals(1, studyAccount.getStudy().getNumberOfCurrentEnrolment());
         //when
         mockMvc.perform(put("/api/study/member/{studyAccountId}", joinerStudyAccountId))
                 .andDo(print())
@@ -140,6 +141,39 @@ public class StudyApiControllerIntegrationTest {
         //then
         Study study = studyAccount.getStudy();
         assertEquals(2, study.getNumberOfCurrentEnrolment());
+    }
+
+    @DisplayName("Accept 해준 상태에서 cancel하면 currentEnrolment 감소.")
+    @Test
+    @WithAccount("joiner")
+    void shouldDecreaseEnrolmentWhenCancelJoinStudy() throws Exception {
+        //given
+        Account managerAccount = Account.builder()
+                .email("email@email.com")
+                .nickname("manager")
+                .build();
+        accountRepository.save(managerAccount);
+        CreateStudyRequest request = createStudyRequest(1, 2);
+        Long studyAccountManagerId = studyService.createStudy(request, managerAccount);
+        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountManagerId).get();
+
+        Account memberAccount = accountRepository.findByNickname("joiner").get();
+        JoinStudyRequest joinRequest = new JoinStudyRequest(studyAccount.getStudy().getId(), null, null);
+
+        Long joinerStudyAccountId = studyService.joinStudy(joinRequest, memberAccount);
+        studyService.acceptJoin(managerAccount, joinerStudyAccountId);
+        StudyAccount joinerStudyAccount = studyAccountRepository.findById(joinerStudyAccountId).get();
+
+        assertEquals(2, joinerStudyAccount.getStudy().getNumberOfCurrentEnrolment());
+        assertTrue(joinerStudyAccount.isAccepted());
+        assertFalse(joinerStudyAccount.isCanceledJoin());
+
+        //when
+        mockMvc.perform(delete("/api/study/{studyId}/member",joinerStudyAccount.getStudy().getId()))
+                .andDo(print());
+
+        assertTrue(joinerStudyAccount.isCanceledJoin());
+        assertEquals(1, joinerStudyAccount.getStudy().getNumberOfCurrentEnrolment());
     }
 
     private CreateStudyRequest createStudyRequest(int numberOfMinEnrolment, int numberOfMaxEnrolment) {

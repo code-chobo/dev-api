@@ -85,7 +85,7 @@ public class Study extends BaseEntity{
     }
 
     public void decreaseNumberOfCurrentEnrolment() {
-        this.numberOfCurrentEnrolment++;
+        this.numberOfCurrentEnrolment--;
     }
 
 }

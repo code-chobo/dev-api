@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.api.request.CreateStudyRequest;
 import kr.codechobo.api.request.JoinStudyRequest;
+import kr.codechobo.api.validator.CreateStudyRequestValidator;
 import kr.codechobo.config.security.TokenManager;
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
@@ -27,6 +29,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -58,6 +61,9 @@ class StudyApiControllerTest {
     @MockBean
     StudyService studyService;
 
+    @MockBean
+    CreateStudyRequestValidator createStudyRequestValidator;
+
 
     @DisplayName("startDate가 EndDate 보다 늦으면 안된다. 4xx client error")
     @Test
@@ -73,7 +79,8 @@ class StudyApiControllerTest {
                 .startDate(LocalDateTime.of(2020, Month.DECEMBER, 1, 0, 0))
                 .endDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
                 .build();
-
+        given(createStudyRequestValidator.supports(request.getClass())).willReturn(true);
+        doThrow(ValidationException.class).when(createStudyRequestValidator).validate(any(), any());
         //when
         mockMvc.perform(post("/api/study")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -95,7 +102,7 @@ class StudyApiControllerTest {
         given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
 
         CreateStudyRequest request = createStudyRequest(1, 1);
-
+        given(createStudyRequestValidator.supports(request.getClass())).willReturn(true);
         //when
         mockMvc.perform(post("/api/study")
                     .contentType(MediaType.APPLICATION_JSON)

@@ -48,9 +48,9 @@ public class StudyService {
         return savedStudyAccount.getId();
     }
 
-    public Long cancelJoin(Long studyId, Account account) {
+    public Long cancelJoin(Long studyId, Account memberAccount) {
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new NotFoundStudyException(studyId));
-        StudyAccount studyAccount = studyAccountRepository.findStudyAccountByStudyAndAccountAndCanceledJoinIsFalse(study, account).orElseThrow(() -> new NotFoundStudyAccountException(account.getId()));
+        StudyAccount studyAccount = studyAccountRepository.findStudyAccountByStudyAndAccountAndCanceledJoinIsFalse(study, memberAccount).orElseThrow(() -> new NotFoundStudyAccountException(memberAccount.getId()));
         studyAccount.canceledJoin();
         return studyAccount.getId();
     }
@@ -60,12 +60,12 @@ public class StudyService {
     }
 
 
-    public void acceptJoin(Account account, Long studyAccountId) {
-        StudyAccount manager = studyAccountRepository.findByAccountId(account.getId()).orElseThrow(() -> new NotFoundStudyAccountException(studyAccountId));
+    public void acceptJoin(Account managerAccount, Long studyAccountRoleMemberId) {
+        StudyAccount manager = studyAccountRepository.findByAccountId(managerAccount.getId()).orElseThrow(() -> new NotFoundStudyAccountException(studyAccountRoleMemberId));
         if(!manager.isManager()) {
             throw new IllegalStateException("참여를 수락할 권한이 없습니다.");
         }
-        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountId).orElseThrow(() -> new NotFoundStudyAccountException(studyAccountId));
+        StudyAccount studyAccount = studyAccountRepository.findById(studyAccountRoleMemberId).orElseThrow(() -> new NotFoundStudyAccountException(studyAccountRoleMemberId));
         studyAccount.acceptJoin();
     }
 }
