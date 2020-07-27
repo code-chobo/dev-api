@@ -2,6 +2,7 @@ package kr.codechobo.config;
 
 import kr.codechobo.domain.Account;
 import kr.codechobo.domain.AccountRole;
+import org.springframework.boot.test.autoconfigure.restdocs.RestDocsMockMvcConfigurationCustomizer;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+
 /**
  * @author : Eunmo Hong
  * @since : 2020/07/26
@@ -23,6 +26,13 @@ import java.util.Optional;
 @Profile("test")
 @EnableJpaAuditing(auditorAwareRef = "testAuditorProvider")
 public class TestProfileConfiguration {
+
+    @Bean
+    public RestDocsMockMvcConfigurationCustomizer restDocsMockMvcConfigurationCustomizer() {
+        return configurer -> configurer.operationPreprocessors()
+                .withRequestDefaults(prettyPrint())
+                .withResponseDefaults(prettyPrint());
+    }
 
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {

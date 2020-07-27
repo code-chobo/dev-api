@@ -32,6 +32,7 @@ public class StudyResponse {
                 .numberOfCurrentEnrolment(study.getNumberOfCurrentEnrolment())
                 .closed(study.isClosed())
                 .bankAccount(study.getBankAccount())
+                .leaderContact(study.getLeaderContact())
                 .createdBy(study.getCreatedBy())
                 .createdDate(study.getCreatedDate())
                 .modifiedDate(study.getModifiedDate())

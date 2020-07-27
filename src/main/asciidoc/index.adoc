@@ -1,9 +1,40 @@
-= Do It!
+= Code Chobo
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 4
 :sectlinks:
-:operation-curl-request-title: 요청 예
-:operation-http-response-title: 응답 예
+:operation-request-headers-title: 요청 헤더
+:operation-request-fields-title: 요청 필드
+:operation-curl-request-title: 요청 예시
+:operation-http-request-title: 요청 구조
+:operation-http-response-title: 응답 구조
+:operation-path-parameters-title: 경로 인자값
+
+
+[[Account]]
+== 회원
+
+[[sign-up]]
+=== 회원가입
+`POST`요청을 이용해 회원가입을 할 수 있다.
+
+operation::sign-up[snippets='request-fields,curl-request,http-request,http-response']
+
+---
+
+[[Study]]
+== 스터디
+
+[[create-study]]
+=== 스터디 만들기
+`POST` 요청을 이용해 스터디를 만들 수 있다.
+
+operation::create-study[snippets='request-fields,request-headers,curl-request,http-request,http-response']
+
+[[find-study]]
+=== 스터디 단 건 조회
+`GET` 요청을 이용해 스터디를 조회할 수 있다.
+
+operation::find-study[snippets='path-parameters,curl-request,http-request,http-response']

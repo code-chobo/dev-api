@@ -29,7 +29,7 @@ public class StudyService {
     private final StudyAccountRepository studyAccountRepository;
 
     public Long createStudy(CreateStudyRequest request, Account account) {
-        Study study = Study.createStudy(request.getTitle(), request.getDescription(), request.getLocation(), request.getStartDate(), request.getEndDate(), request.getNumberOfMaxEnrolment(), request.getNumberOfMinEnrolment(), request.getBankAccount());
+        Study study = Study.createStudy(request.getTitle(), request.getDescription(), request.getLocation(), request.getStartDate(), request.getEndDate(), request.getNumberOfMaxEnrolment(), request.getNumberOfMinEnrolment(), request.getBankAccount(), request.getLeaderContact());
         Study savedStudy = studyRepository.save(study);
 
         StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, savedStudy, null, null, StudyRole.MANAGER);

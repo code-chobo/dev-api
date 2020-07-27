@@ -42,11 +42,13 @@ public class Study extends BaseEntity{
 
     private String bankAccount;
 
+    private String leaderContact;
+
     @Builder
     public Study(Long id, String title, String description, Location location,
                  LocalDateTime startDate, LocalDateTime endDate,
                  int numberOfMaxEnrolment, int numberOfMinEnrolment,
-                 boolean closed, String bankAccount) {
+                 boolean closed, String bankAccount, String leaderContact) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -61,12 +63,14 @@ public class Study extends BaseEntity{
         this.closed = closed;
         this.bankAccount = bankAccount;
 
+        this.leaderContact = leaderContact;
+
     }
 
     public static Study createStudy(String title, String description, Location location,
                                     LocalDateTime startDate, LocalDateTime endDate,
                                     int numberOfMaxEnrolment, int numberOfMinEnrolment,
-                                    String bankAccount) {
+                                    String bankAccount, String leaderContact) {
         return Study.builder()
                 .title(title)
                 .description(description)
@@ -77,6 +81,7 @@ public class Study extends BaseEntity{
                 .numberOfMinEnrolment(numberOfMinEnrolment)
                 .closed(false)
                 .bankAccount(bankAccount)
+                .leaderContact(leaderContact)
                 .build();
     }
 
