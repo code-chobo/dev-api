@@ -12,16 +12,19 @@ import kr.codechobo.domain.Location;
 import kr.codechobo.domain.Study;
 import kr.codechobo.domain.StudyAccount;
 import kr.codechobo.study.StudyAccountRepository;
+import kr.codechobo.study.StudyRepository;
 import kr.codechobo.study.StudyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -30,6 +33,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -51,6 +55,8 @@ public class StudyApiRestDocs {
     AccountRepository accountRepository;
     @Autowired
     StudyService studyService;
+    @Autowired
+    StudyRepository studyRepository;
     @Autowired
     StudyAccountRepository studyAccountRepository;
 
@@ -173,10 +179,75 @@ public class StudyApiRestDocs {
                 ));
     }
 
+    @DisplayName("가입한 스터디 전부 조회")
+    @Test
+    @WithAccount("tester")
+    void findAllJoinedStudies() throws Exception {
+        Account account = accountRepository.findByNickname("tester").get();
+        Study study1 = createStudy("스프링 스터디", "스프링을 더 깊게 알아갑시다.");
+        Study study2 = createStudy("JPA 스터디", "JPA를 더 깊게 알아갑시다.");
+        StudyAccount studyAccount1 = StudyAccount.builder().study(study1).account(account).build();
+        StudyAccount studyAccount2 = StudyAccount.builder().study(study2).account(account).build();
+        StudyAccount studyAccount3 = StudyAccount.builder().build();
+        studyRepository.save(study1);
+        studyRepository.save(study2);
+        studyAccountRepository.save(studyAccount1);
+        studyAccountRepository.save(studyAccount2);
+        studyAccountRepository.save(studyAccount3);
+
+        String token = tokenManager.createToken(account);
+
+        mockMvc.perform(get("/api/study")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.studies", hasSize(2)))
+
+                .andDo(document(
+                        "find-all-my-studies",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("login시 발급받은 jwt토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("studies").description("루트"),
+                                fieldWithPath("studies[].id").description("study의 id"),
+                                fieldWithPath("studies[].title").description("study의 제목"),
+                                fieldWithPath("studies[].description").description("study의 내용"),
+                                fieldWithPath("studies[].location.x").description("study의 좌표 x"),
+                                fieldWithPath("studies[].location.y").description("study의 좌표 y"),
+                                fieldWithPath("studies[].startDate").description("study 시작 날짜"),
+                                fieldWithPath("studies[].endDate").description("study 끝나는 날짜"),
+                                fieldWithPath("studies[].numberOfMaxEnrolment").description("study 최대 모집 인원"),
+                                fieldWithPath("studies[].numberOfMinEnrolment").description("study 최소 모집 인원"),
+                                fieldWithPath("studies[].numberOfCurrentEnrolment").description("study 현재 인원"),
+                                fieldWithPath("studies[].closed").description("study 모집 마감 플래그"),
+                                fieldWithPath("studies[].bankAccount").description("study 비용 입금 계좌"),
+                                fieldWithPath("studies[].leaderContact").description("study 주최자 연락처"),
+                                fieldWithPath("studies[].createdBy").description("study 주최자의 메일"),
+                                fieldWithPath("studies[].createdDate").description("study 모집 글이 쓰여진 시각"),
+                                fieldWithPath("studies[].modifiedDate").description("study 모집 글이 최종 변경된 시각")
+                        )
+                ));
+    }
+
     private CreateStudyRequest createStudyRequest() {
         return CreateStudyRequest.builder()
                 .title("스프링 스터디")
                 .description("스프링을 더 깊게 알아봅시다.")
+                .startDate(LocalDateTime.of(2020, 7, 25, 0, 0))
+                .endDate(LocalDateTime.of(2020, 7, 30, 0, 0))
+                .numberOfMaxEnrolment(10)
+                .numberOfMinEnrolment(5)
+                .leaderContact("010-1234-1234")
+                .bankAccount("국민은행 111-111")
+                .location(new Location(0, 0))
+                .build();
+    }
+
+    private Study createStudy(String title, String description) {
+        return Study.builder()
+                .title(title)
+                .description(description)
                 .startDate(LocalDateTime.of(2020, 7, 25, 0, 0))
                 .endDate(LocalDateTime.of(2020, 7, 30, 0, 0))
                 .numberOfMaxEnrolment(10)

@@ -13,10 +13,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -106,6 +108,23 @@ class StudyServiceTest {
         verify(studyRepository).findById(1L);
     }
 
+    @DisplayName("내가 가입한 study들 조회")
+    @Test
+    void findAllMyStudiesTest() {
+        //given
+        Study study1 = createStudy(10, 0);
+        Study study2 = createStudy(10, 5);
+        Account account = createAccountManager();
+        given(studyAccountRepository.findAllByAccount(any(Account.class))).willReturn(createStudyAccounts(account, study1, study2));
+
+        //when
+        List<Study> myStudies = studyService.findMyStudies(account);
+
+        //then
+        assertTrue(myStudies.contains(study1));
+        assertTrue(myStudies.contains(study2));
+    }
+
     private StudyAccount createStudyAccountRoleMember() {
         return StudyAccount.builder()
                 .study(createStudy(2, 1))
@@ -126,7 +145,11 @@ class StudyServiceTest {
         return Study.createStudy("title", "desc", new Location(0, 0), LocalDateTime.of(2020, 7, 1, 0, 0), LocalDateTime.of(2020, 7, 2, 0, 0), maxEnrolment, minEnrolment, "국민 1111", "010-1234-1234");
     }
 
-
+    private List<StudyAccount> createStudyAccounts(Account account, Study ...study) {
+        return Arrays.stream(study)
+                .map(s -> StudyAccount.builder().account(account).study(s).build())
+                .collect(Collectors.toList());
+    }
 
     private CreateStudyRequest createStudyRequest(int numberOfMinEnrolment, int numberOfMaxEnrolment) {
         return CreateStudyRequest.builder()

@@ -45,3 +45,9 @@ operation::find-study[snippets='path-parameters,curl-request,http-request,http-r
 `Delete` 요청을 이용해 스터디 참여를 취소할 수 있다.
 
 operation::cancel-join-study[snippets='path-parameters,request-headers,curl-request,http-request,http-response']
+
+[[find-all-my-studies]]
+=== 참여 스터디 모두 조회
+'Get' 요청을 이용해 로그인한 사용자가 가입한 모든 스터디를 조회할 수 있다.
+
+operation::find-all-my-studies[snippets='request-headers,curl-request,http-request,http-response,response-fields']

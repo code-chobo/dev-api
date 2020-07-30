@@ -1,8 +1,11 @@
 package kr.codechobo.study;
 
+import kr.codechobo.domain.Account;
 import kr.codechobo.domain.Study;
+import kr.codechobo.domain.StudyAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**

@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author : Eunmo Hong
  * @since : 2020/07/21
@@ -67,5 +70,10 @@ public class StudyService {
         }
         StudyAccount studyAccount = studyAccountRepository.findById(studyAccountRoleMemberId).orElseThrow(() -> new NotFoundStudyAccountException(studyAccountRoleMemberId));
         studyAccount.acceptJoin();
+    }
+
+    public List<Study> findMyStudies(Account account) {
+        List<StudyAccount> studyAccounts = studyAccountRepository.findAllByAccount(account);
+        return studyAccounts.stream().map(StudyAccount::getStudy).collect(Collectors.toList());
     }
 }
