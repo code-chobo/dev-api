@@ -2,6 +2,7 @@ package kr.codechobo.study;
 
 import kr.codechobo.account.AccountRepository;
 import kr.codechobo.config.TestProfileConfiguration;
+import kr.codechobo.config.WithAccount;
 import kr.codechobo.domain.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import(TestProfileConfiguration.class)
 @ActiveProfiles("test")
 @DataJpaTest
-@Transactional
 class StudyAccountRepositoryTest {
 
     @Autowired
@@ -81,5 +82,27 @@ class StudyAccountRepositoryTest {
 
         //then
         assertTrue(findStudyAccount.isEmpty());
+    }
+
+    @DisplayName("내가 참여한 스터디 조회")
+    @Test
+    void searchMyStudy() {
+        //given
+        Account account = Account.builder().email("email@email.com").build();
+        Study study1 = Study.builder().title("스프링").location(new Location(0, 0)).build();
+        StudyAccount studyAccount1 = StudyAccount.builder().account(account).study(study1).build();
+        Study study2 = Study.builder().title("JPA").location(new Location(0, 0)).build();
+        StudyAccount studyAccount2 = StudyAccount.builder().account(account).study(study1).build();
+        accountRepository.save(account);
+        studyRepository.save(study1);
+        studyRepository.save(study2);
+        studyAccountRepository.save(studyAccount1);
+        studyAccountRepository.save(studyAccount2);
+
+        //when
+        List<StudyAccount> allByAccount = studyAccountRepository.findAllByAccount(account);
+
+        //then
+        assertEquals(2, allByAccount.size());
     }
 }

@@ -17,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author : Eunmo Hong
  * @since : 2020/07/21
@@ -61,6 +63,12 @@ public class StudyApiController {
     public ResponseEntity<ApiResult> findStudy(@PathVariable Long studyId) {
         Study study = studyService.findStudyById(studyId);
         return StudyResponse.build(study);
+    }
+
+    @GetMapping("/study")
+    public ResponseEntity<ApiResult> findMyStudies(@CurrentAccount Account account) {
+        List<Study> myStudies = studyService.findMyStudies(account);
+        return StudyResponse.build(myStudies);
     }
 
     @DeleteMapping("/study/{studyId}/member")

@@ -14,6 +14,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author : Eunmo Hong
@@ -22,9 +25,23 @@ import java.time.LocalDateTime;
 
 @Getter
 public class StudyResponse {
+    public static ResponseEntity<ApiResult> build(List<Study> studies) {
+        List<StudyData> studyDataList = new ArrayList<>(studies.size());
+        for (Study study : studies) {
+            StudyData studyData = buildStudy(study);
+            studyDataList.add(studyData);
+        }
+        return result("studies", studyDataList);
+    }
+
 
     public static ResponseEntity<ApiResult> build(Study study) {
-        StudyData studyData = StudyData.builder()
+        StudyData studyData = buildStudy(study);
+        return result("study", studyData);
+    }
+
+    private static StudyData buildStudy(Study study) {
+        return StudyData.builder()
                 .id(study.getId())
                 .title(study.getTitle())
                 .description(study.getDescription())
@@ -41,10 +58,11 @@ public class StudyResponse {
                 .createdDate(study.getCreatedDate())
                 .modifiedDate(study.getModifiedDate())
                 .build();
+    }
 
-
+    private static ResponseEntity<ApiResult> result(String key, Object o) {
         ApiResult result = ApiResult.blank()
-                .add("study", studyData);
+                .add(key, o);
         return Result.ok(result);
     }
 

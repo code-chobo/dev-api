@@ -5,6 +5,7 @@ import kr.codechobo.domain.Study;
 import kr.codechobo.domain.StudyAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,4 +18,6 @@ public interface StudyAccountRepository extends JpaRepository<StudyAccount, Long
     Optional<StudyAccount> findStudyAccountByStudyAndAccountAndCanceledJoinIsFalse(Study study, Account account);
 
     Optional<StudyAccount> findByAccountId(Long accountId);
+
+    List<StudyAccount> findAllByAccount(Account account);
 }
