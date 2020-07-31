@@ -31,11 +31,11 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final StudyAccountRepository studyAccountRepository;
 
-    public Long createStudy(CreateStudyRequest request, Account account) {
+    public Long createStudy(CreateStudyRequest request, Account managerAccount) {
         Study study = Study.createStudy(request.getTitle(), request.getDescription(), request.getLocation(), request.getStartDate(), request.getEndDate(), request.getNumberOfMaxEnrolment(), request.getNumberOfMinEnrolment(), request.getBankAccount(), request.getLeaderContact());
         Study savedStudy = studyRepository.save(study);
 
-        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, savedStudy, null, null, StudyRole.MANAGER);
+        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(managerAccount, savedStudy, null, null, StudyRole.MANAGER);
         StudyAccount savedStudyAccount = studyAccountRepository.save(studyAccount);
         savedStudyAccount.acceptJoin();
 
