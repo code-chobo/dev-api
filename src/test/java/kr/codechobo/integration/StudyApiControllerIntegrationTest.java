@@ -134,7 +134,7 @@ public class StudyApiControllerIntegrationTest {
 
         assertEquals(1, studyAccount.getStudy().getNumberOfCurrentEnrolment());
         //when
-        mockMvc.perform(put("/api/study/member/{studyAccountId}", joinerStudyAccountId))
+        mockMvc.perform(patch("/api/study/member/{studyAccountId}", joinerStudyAccountId))
                 .andDo(print())
                 .andExpect(jsonPath("$.message").value("SUCCESS"));
 

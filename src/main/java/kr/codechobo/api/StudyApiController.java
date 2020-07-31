@@ -52,7 +52,7 @@ public class StudyApiController {
         return Result.ok(ApiResult.blank().add("studyAccountId", studyAccountId));
     }
 
-    @PutMapping("/study/member/{studyAccountId}")
+    @PatchMapping("/study/member/{studyAccountId}")
     public ResponseEntity<ApiResult> acceptJoinStudy(@CurrentAccount Account account,
                                                      @PathVariable Long studyAccountId) {
         studyService.acceptJoin(account, studyAccountId);
