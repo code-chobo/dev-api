@@ -51,3 +51,9 @@ operation::cancel-join-study[snippets='path-parameters,request-headers,curl-requ
 'Get' 요청을 이용해 로그인한 사용자가 가입한 모든 스터디를 조회할 수 있다.
 
 operation::find-all-my-studies[snippets='request-headers,curl-request,http-request,http-response,response-fields']
+
+[[accept-join-study]]
+=== 스터디 참여 수락
+`PATCH` 요청을 이용해 Study의 Manager가 참여요청에 대해 수락할 수 있다.
+
+operation::accept-join-study[snippets='path-parameters,request-headers,curl-request,http-request,http-response,response-fields']

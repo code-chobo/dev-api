@@ -7,10 +7,7 @@ import kr.codechobo.api.request.JoinStudyRequest;
 import kr.codechobo.config.MockMvcTest;
 import kr.codechobo.config.WithAccount;
 import kr.codechobo.config.security.TokenManager;
-import kr.codechobo.domain.Account;
-import kr.codechobo.domain.Location;
-import kr.codechobo.domain.Study;
-import kr.codechobo.domain.StudyAccount;
+import kr.codechobo.domain.*;
 import kr.codechobo.study.StudyAccountRepository;
 import kr.codechobo.study.StudyRepository;
 import kr.codechobo.study.StudyService;
@@ -96,6 +93,50 @@ public class StudyApiRestDocs {
                         ),
                         responseFields(
                                 fieldWithPath("studyAccountId").description("studyAccount의 id")
+                        )
+                ));
+    }
+
+    @DisplayName("스터디 참여 수락 api")
+    @WithAccount("manager")
+    @Test
+    void acceptJoinStudyApi() throws Exception {
+        Account managerAccount = accountRepository.findByNickname("manager").get();
+        CreateStudyRequest createStudyRequest = createStudyRequest();
+        Long studyAccountManagerId = studyService.createStudy(createStudyRequest, managerAccount);
+
+        StudyAccount studyAccountManager = studyAccountRepository.findById(studyAccountManagerId).get();
+
+        Study study = studyAccountManager.getStudy();
+        Account memberAccount = Account.builder()
+                .email("email@email.com")
+                .contact("010-1111-1111")
+                .nickname("Grace")
+                .role(AccountRole.COMMON)
+                .build();
+        accountRepository.save(memberAccount);
+        JoinStudyRequest joinStudyRequest = new JoinStudyRequest(study.getId(), "국민 111", memberAccount.getContact());
+        Long studyAccountMemberId = studyService.joinStudy(joinStudyRequest, memberAccount);
+
+
+        String token = tokenManager.createToken(managerAccount);
+
+        mockMvc.perform(patch("/api/study/member/{studyAccountId}", studyAccountMemberId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("message").value("SUCCESS"))
+
+                .andDo(document(
+                        "accept-join-study",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("로그인 시 발급받는 jwt토큰")
+                        ),
+                        pathParameters(
+                                parameterWithName("studyAccountId").description("참여 신청한 studyAccount의 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("message").description("응답 메시지")
                         )
                 ));
     }

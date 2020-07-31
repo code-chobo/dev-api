@@ -40,8 +40,8 @@ public class StudyApiController {
 
     @PostMapping("/study")
     public ResponseEntity<ApiResult> createStudy(@RequestBody @Validated CreateStudyRequest createStudyRequest,
-                                                 @CurrentAccount Account account) {
-        Long studyAccountId = studyService.createStudy(createStudyRequest, account);
+                                                 @CurrentAccount Account managerAccount) {
+        Long studyAccountId = studyService.createStudy(createStudyRequest, managerAccount);
         return Result.created(ApiResult.blank().add("studyAccountId", studyAccountId));
     }
 
@@ -53,9 +53,9 @@ public class StudyApiController {
     }
 
     @PatchMapping("/study/member/{studyAccountId}")
-    public ResponseEntity<ApiResult> acceptJoinStudy(@CurrentAccount Account account,
+    public ResponseEntity<ApiResult> acceptJoinStudy(@CurrentAccount Account managerAccount,
                                                      @PathVariable Long studyAccountId) {
-        studyService.acceptJoin(account, studyAccountId);
+        studyService.acceptJoin(managerAccount, studyAccountId);
         return Result.ok(ApiResult.message("SUCCESS"));
     }
 
