@@ -1,13 +1,14 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/codechobo
-    username: sa
-    password:
+    url: jdbc:mysql://localhost:3306/codechobo_test?serverTimezone=Asia/Seoul&useSSL=false
+    username: codechobo_user
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQL57Dialect
   profiles:
     include: info
 logging:
