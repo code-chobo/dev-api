@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(TestProfileConfiguration.class)
 @MockMvcTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class AccountApiControllerIntegrationTest {
 
     @Autowired

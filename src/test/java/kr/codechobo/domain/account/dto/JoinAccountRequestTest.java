@@ -4,6 +4,7 @@ import kr.codechobo.domain.account.dto.JoinAccountRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * see {@link JoinAccountRequest}
  */
 
+@ActiveProfiles("test")
 class JoinAccountRequestTest {
 
     Validator validator;
