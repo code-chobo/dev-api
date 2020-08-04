@@ -46,11 +46,10 @@ public class Study extends BaseEntity {
     private String leaderContact;
 
     @Builder
-    public Study(Long id, String title, String description, Location location,
+    public Study(String title, String description, Location location,
                  LocalDateTime startDate, LocalDateTime endDate,
                  int numberOfMaxEnrolment, int numberOfMinEnrolment,
                  boolean closed, String bankAccount, String leaderContact) {
-        this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;

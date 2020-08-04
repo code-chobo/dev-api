@@ -47,7 +47,6 @@ class SampleApiControllerTest {
     @Test
     void commonAccountTest() throws Exception {
         Account account = Account.builder()
-                .id(1L)
                 .email("email@email.com")
                 .nickname("tester")
                 .password("12345678")
@@ -68,7 +67,6 @@ class SampleApiControllerTest {
     @Test
     void adminAccountTest() throws Exception {
         Account account = Account.builder()
-                .id(1L)
                 .email("email@email.com")
                 .nickname("tester")
                 .password("12345678")

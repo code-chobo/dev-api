@@ -164,7 +164,6 @@ class StudyApiControllerTest {
 
     private Account createAccount() {
         return Account.builder()
-                .id(1L)
                 .email("email@email.com")
                 .nickname("tester")
                 .password("12345678")
@@ -174,7 +173,6 @@ class StudyApiControllerTest {
 
     private Account createManager() {
         return Account.builder()
-                .id(2L)
                 .email("email@email.com")
                 .nickname("Manager")
                 .password("12345678")
@@ -184,7 +182,6 @@ class StudyApiControllerTest {
 
     private Study createStudy() {
         return Study.builder()
-                .id(1L)
                 .title("title")
                 .description("desc")
                 .location(new Location(0, 0))

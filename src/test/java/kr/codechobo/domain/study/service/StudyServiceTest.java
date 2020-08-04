@@ -172,7 +172,6 @@ class StudyServiceTest {
 
     private Account createAccountManager() {
         return Account.builder()
-                .id(2L)
                 .email("email@email.com")
                 .nickname("Manager")
                 .password("12345678")
@@ -182,7 +181,6 @@ class StudyServiceTest {
 
     private Account createAccountMember() {
         return Account.builder()
-                .id(1L)
                 .email("email@email.com")
                 .nickname("tester")
                 .password("12345678")
