@@ -67,29 +67,29 @@ public class StudyResponse {
     @ToString
     @Getter
     private static class StudyData {
-        private Long id;
-        private String title;
-        private String description;
-        private Location location;
+        private final Long id;
+        private final String title;
+        private final String description;
+        private final Location location;
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonFormat(pattern = "yyyy-MM-dd kk:mm")
-        private LocalDateTime startDate;
+        private final LocalDateTime startDate;
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonFormat(pattern = "yyyy-MM-dd kk:mm")
-        private LocalDateTime endDate;
-        private int numberOfMaxEnrolment;
-        private int numberOfMinEnrolment;
-        private int numberOfCurrentEnrolment;
-        private boolean closed;
-        private String bankAccount;
-        private String leaderContact;
-        private String createdBy;
+        private final LocalDateTime endDate;
+        private final int numberOfMaxEnrolment;
+        private final int numberOfMinEnrolment;
+        private final int numberOfCurrentEnrolment;
+        private final boolean closed;
+        private final String bankAccount;
+        private final String leaderContact;
+        private final String createdBy;
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-        private LocalDateTime createdDate;
+        private final LocalDateTime createdDate;
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-        private LocalDateTime modifiedDate;
+        private final LocalDateTime modifiedDate;
 
         @Builder
         public StudyData(Long id, String title, String description, Location location, LocalDateTime startDate, LocalDateTime endDate, int numberOfMaxEnrolment, int numberOfMinEnrolment, int numberOfCurrentEnrolment, boolean closed, String bankAccount, String leaderContact, String createdBy, LocalDateTime createdDate, LocalDateTime modifiedDate) {

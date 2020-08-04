@@ -20,7 +20,7 @@ import java.util.function.Function;
 @Component
 public class TokenManager {
 
-    private Key key;
+    private final Key key;
     private static final long EXPIRATION_TIME = 864_000_000; // 10days
 
     public TokenManager(@Value("${app.secret}") String secret) {

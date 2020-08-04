@@ -6,6 +6,6 @@ package kr.codechobo.domain.account.entity;
  */
 
 public enum AccountRole {
-    COMMON, ADMIN;
+    COMMON, ADMIN
 
 }

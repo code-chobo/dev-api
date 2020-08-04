@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 public class AccountAdapter extends User {
 
-    private Account account;
+    private final Account account;
 
     public AccountAdapter(Account account) {
         super(account.getEmail(), account.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_"+account.getRole().name())));
