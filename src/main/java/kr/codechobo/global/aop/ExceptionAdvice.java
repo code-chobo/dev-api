@@ -2,7 +2,7 @@ package kr.codechobo.global.aop;
 
 import kr.codechobo.domain.account.exception.ExistsEmailException;
 import kr.codechobo.domain.account.exception.ExistsNicknameException;
-import kr.codechobo.domain.account.exception.PasswordWrongException;
+import kr.codechobo.domain.account.exception.PasswordNotMatchException;
 import kr.codechobo.global.resultspec.ApiResult;
 import kr.codechobo.global.resultspec.Result;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ import javax.validation.ValidationException;
 @RestControllerAdvice
 public class ExceptionAdvice {
 
-    @ExceptionHandler(PasswordWrongException.class)
-    public ResponseEntity<ApiResult> passwordWrong(PasswordWrongException e) {
+    @ExceptionHandler(PasswordNotMatchException.class)
+    public ResponseEntity<ApiResult> passwordNotMatch(PasswordNotMatchException e) {
         return Result.failure(e.getMessage());
     }
 

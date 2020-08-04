@@ -36,7 +36,7 @@ public class StudyApiController {
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(createStudyRequestValidator);
     }
-
+ 
     @PostMapping("/study")
     public ResponseEntity<ApiResult> createStudy(@RequestBody @Validated CreateStudyRequest createStudyRequest,
                                                  @CurrentAccount Account managerAccount) {
