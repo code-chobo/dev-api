@@ -25,8 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class AccountRepositoryTest {
 
-    @Autowired
-    AccountRepository accountRepository;
+    @Autowired AccountRepository accountRepository;
 
     private static final String EMAIL = "email@email.com";
     private static final String NICKNAME = "GraceLove";

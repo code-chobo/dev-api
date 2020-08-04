@@ -1,15 +1,14 @@
 package kr.codechobo.domain.study.service;
 
-import kr.codechobo.domain.study.dto.CreateStudyRequest;
-import kr.codechobo.domain.study.dto.JoinStudyRequest;
 import kr.codechobo.domain.account.entity.Account;
 import kr.codechobo.domain.account.entity.AccountRole;
+import kr.codechobo.domain.study.dto.CreateStudyRequest;
+import kr.codechobo.domain.study.dto.JoinStudyRequest;
 import kr.codechobo.domain.study.entity.Location;
 import kr.codechobo.domain.study.entity.Study;
 import kr.codechobo.domain.study.entity.StudyAccount;
 import kr.codechobo.domain.study.repository.StudyAccountRepository;
 import kr.codechobo.domain.study.repository.StudyRepository;
-import kr.codechobo.domain.study.service.StudyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -39,11 +39,8 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(SpringExtension.class)
 class StudyServiceTest {
 
-    @MockBean
-    StudyRepository studyRepository;
-
-    @MockBean
-    StudyAccountRepository studyAccountRepository;
+    @MockBean StudyRepository studyRepository;
+    @MockBean StudyAccountRepository studyAccountRepository;
 
     StudyService studyService;
 

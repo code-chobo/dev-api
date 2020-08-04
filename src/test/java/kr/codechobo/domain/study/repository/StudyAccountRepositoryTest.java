@@ -32,14 +32,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class StudyAccountRepositoryTest {
 
-    @Autowired
-    StudyAccountRepository studyAccountRepository;
-
-    @Autowired
-    StudyRepository studyRepository;
-
-    @Autowired
-    AccountRepository accountRepository;
+    @Autowired StudyAccountRepository studyAccountRepository;
+    @Autowired StudyRepository studyRepository;
+    @Autowired AccountRepository accountRepository;
 
     @DisplayName("study, account -> studyAccount.canceledJoin 이 false인 데이터 조회한다.")
     @Test

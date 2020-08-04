@@ -1,17 +1,15 @@
 package kr.codechobo.domain.study.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.codechobo.domain.account.entity.Account;
+import kr.codechobo.domain.account.entity.AccountRole;
 import kr.codechobo.domain.account.repository.AccountRepository;
 import kr.codechobo.domain.study.dto.CreateStudyRequest;
 import kr.codechobo.domain.study.dto.JoinStudyRequest;
-import kr.codechobo.domain.study.api.CreateStudyRequestValidator;
-import kr.codechobo.global.util.TokenManager;
-import kr.codechobo.domain.account.entity.Account;
-import kr.codechobo.domain.account.entity.AccountRole;
-import kr.codechobo.domain.study.api.StudyApiController;
 import kr.codechobo.domain.study.entity.Location;
 import kr.codechobo.domain.study.entity.Study;
 import kr.codechobo.domain.study.service.StudyService;
+import kr.codechobo.global.util.TokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,23 +46,13 @@ class StudyApiControllerTest {
 
     private static final String TOKEN_PREFIX = "Bearer ";
 
-    @Autowired
-    MockMvc mockMvc;
+    @Autowired MockMvc mockMvc;
+    @Autowired ObjectMapper objectMapper;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @MockBean
-    TokenManager tokenManager;
-
-    @MockBean
-    AccountRepository accountRepository;
-
-    @MockBean
-    StudyService studyService;
-
-    @MockBean
-    CreateStudyRequestValidator createStudyRequestValidator;
+    @MockBean TokenManager tokenManager;
+    @MockBean AccountRepository accountRepository;
+    @MockBean StudyService studyService;
+    @MockBean CreateStudyRequestValidator createStudyRequestValidator;
 
 
     @DisplayName("startDate가 EndDate 보다 늦으면 안된다. 4xx client error")

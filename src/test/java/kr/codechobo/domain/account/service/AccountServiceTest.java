@@ -31,14 +31,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 class AccountServiceTest {
 
-    @MockBean
-    AccountRepository accountRepository;
-
-    @MockBean
-    PasswordEncoder passwordEncoder;
-
-    @MockBean
-    TokenManager tokenManager;
+    @MockBean AccountRepository accountRepository;
+    @MockBean PasswordEncoder passwordEncoder;
+    @MockBean TokenManager tokenManager;
 
     AccountService accountService;
 

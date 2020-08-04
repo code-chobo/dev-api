@@ -1,12 +1,10 @@
 package kr.codechobo.domain.account.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.codechobo.domain.account.api.AccountApiController;
+import kr.codechobo.domain.account.dto.JoinAccountRequest;
+import kr.codechobo.domain.account.exception.ExistsEmailException;
 import kr.codechobo.domain.account.repository.AccountRepository;
 import kr.codechobo.domain.account.service.AccountService;
-import kr.codechobo.domain.account.exception.ExistsEmailException;
-import kr.codechobo.domain.account.dto.JoinAccountRequest;
-import kr.codechobo.domain.account.api.JoinAccountRequestValidator;
 import kr.codechobo.global.util.TokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,29 +31,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AccountApiController.class)
 class AccountApiControllerTest {
 
-    @Autowired
-    ObjectMapper objectMapper;
+    @Autowired ObjectMapper objectMapper;
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountApiController accountApiController;
 
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    AccountApiController accountApiController;
-
-    @MockBean
-    AccountService accountService;
-
-    @MockBean
-    JoinAccountRequestValidator joinAccountRequestValidator;
-
-    @MockBean
-    AccountRepository accountRepository;
-
-    @MockBean
-    TokenManager tokenManager;
-
-    @MockBean
-    AuthenticationManager authenticationManager;
+    @MockBean AccountService accountService;
+    @MockBean JoinAccountRequestValidator joinAccountRequestValidator;
+    @MockBean AccountRepository accountRepository;
+    @MockBean TokenManager tokenManager;
+    @MockBean AuthenticationManager authenticationManager;
 
     @DisplayName("가입 성공")
     @Test
