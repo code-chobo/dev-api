@@ -1,9 +1,9 @@
 package kr.codechobo.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.codechobo.api.request.JoinAccountRequest;
-import kr.codechobo.config.MockMvcTest;
-import kr.codechobo.config.TestProfileConfiguration;
+import kr.codechobo.domain.account.dto.JoinAccountRequest;
+import kr.codechobo.infra.MockMvcTest;
+import kr.codechobo.infra.TestProfileConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

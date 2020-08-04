@@ -1,24 +1,14 @@
 package kr.codechobo.restdocs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.codechobo.account.AccountRepository;
-import kr.codechobo.account.AccountService;
-import kr.codechobo.api.AccountApiController;
-import kr.codechobo.api.request.JoinAccountRequest;
-import kr.codechobo.api.validator.JoinAccountRequestValidator;
-import kr.codechobo.config.MockMvcTest;
-import kr.codechobo.config.security.TokenManager;
+import kr.codechobo.domain.account.dto.JoinAccountRequest;
+import kr.codechobo.infra.MockMvcTest;
+import kr.codechobo.infra.RestDocsTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;

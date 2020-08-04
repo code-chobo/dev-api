@@ -1,22 +1,26 @@
 package kr.codechobo.restdocs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.codechobo.account.AccountRepository;
-import kr.codechobo.api.request.CreateStudyRequest;
-import kr.codechobo.api.request.JoinStudyRequest;
-import kr.codechobo.config.MockMvcTest;
-import kr.codechobo.config.WithAccount;
-import kr.codechobo.config.security.TokenManager;
-import kr.codechobo.domain.*;
-import kr.codechobo.study.StudyAccountRepository;
-import kr.codechobo.study.StudyRepository;
-import kr.codechobo.study.StudyService;
+import kr.codechobo.domain.account.repository.AccountRepository;
+import kr.codechobo.domain.study.dto.CreateStudyRequest;
+import kr.codechobo.domain.study.dto.JoinStudyRequest;
+import kr.codechobo.infra.MockMvcTest;
+import kr.codechobo.infra.RestDocsTest;
+import kr.codechobo.infra.WithAccount;
+import kr.codechobo.global.util.TokenManager;
+import kr.codechobo.domain.account.entity.Account;
+import kr.codechobo.domain.account.entity.AccountRole;
+import kr.codechobo.domain.study.entity.Location;
+import kr.codechobo.domain.study.entity.Study;
+import kr.codechobo.domain.study.entity.StudyAccount;
+import kr.codechobo.domain.study.repository.StudyAccountRepository;
+import kr.codechobo.domain.study.repository.StudyRepository;
+import kr.codechobo.domain.study.service.StudyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
