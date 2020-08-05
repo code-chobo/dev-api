@@ -37,7 +37,7 @@ public class StudyService {
         Study study = Study.createStudy(request.getTitle(), request.getDescription(), request.getLocation(), request.getStartDate(), request.getEndDate(), request.getNumberOfMaxEnrolment(), request.getNumberOfMinEnrolment(), request.getBankAccount(), request.getLeaderContact());
         Study savedStudy = studyRepository.save(study);
 
-        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(managerAccount, savedStudy, null, null, StudyRole.MANAGER);
+        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(managerAccount, savedStudy, null, StudyRole.MANAGER);
         StudyAccount savedStudyAccount = studyAccountRepository.save(studyAccount);
         savedStudyAccount.acceptJoin();
 
@@ -46,7 +46,7 @@ public class StudyService {
 
     public Long joinStudy(JoinStudyRequest request, Account account) {
         Study study = studyRepository.findById(request.getStudyId()).orElseThrow(() -> new NotFoundStudyException(request.getStudyId()));
-        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, request.getRefundBankAccount(), request.getStudentContact(), StudyRole.MEMBER);
+        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, request.getRefundBankAccount(), StudyRole.MEMBER);
 
         StudyAccount savedStudyAccount = studyAccountRepository.save(studyAccount);
 

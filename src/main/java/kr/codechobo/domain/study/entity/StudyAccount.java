@@ -33,8 +33,6 @@ public class StudyAccount extends BaseEntity {
 
     private String refundBankAccount;
 
-    private String studentContact;
-
     private boolean canceledJoin;
 
     private boolean accepted;
@@ -43,23 +41,21 @@ public class StudyAccount extends BaseEntity {
     private StudyRole studyRole;
 
     @Builder
-    public StudyAccount(Long id, Account account, Study study, String refundBankAccount, String studentContact, boolean canceledJoin, StudyRole studyRole) {
+    public StudyAccount(Long id, Account account, Study study, String refundBankAccount, boolean canceledJoin, StudyRole studyRole) {
         this.id = id;
         this.account = account;
         this.study = study;
         this.refundBankAccount = refundBankAccount;
-        this.studentContact = studentContact;
         this.canceledJoin = canceledJoin;
         this.studyRole = studyRole;
     }
 
-    public static StudyAccount CreateStudyAccount(Account account, Study study, String refundBankAccount, String studentContact, StudyRole studyRole) {
+    public static StudyAccount CreateStudyAccount(Account account, Study study, String refundBankAccount, StudyRole studyRole) {
 
         return StudyAccount.builder()
                 .account(account)
                 .study(study)
                 .refundBankAccount(refundBankAccount)
-                .studentContact(studentContact)
                 .canceledJoin(false)
                 .studyRole(studyRole)
                 .build();
@@ -88,12 +84,6 @@ public class StudyAccount extends BaseEntity {
         this.refundBankAccount = refundBankAccount;
         return refundBankAccount;
     }
-
-    public String changeStudentContact(String studentContact) {
-        this.studentContact = studentContact;
-        return studentContact;
-    }
-
 
     public boolean isManager() {
         return studyRole.equals(StudyRole.MANAGER);

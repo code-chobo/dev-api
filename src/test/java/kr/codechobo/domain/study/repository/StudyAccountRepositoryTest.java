@@ -44,7 +44,7 @@ class StudyAccountRepositoryTest {
         Study study = Study.builder()
                 .location(new Location(0, 0))
                 .build();
-        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, "국민 111", "010-1111-1111", StudyRole.MEMBER);
+        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, "국민 111", StudyRole.MEMBER);
 
         accountRepository.save(account);
         studyRepository.save(study);
@@ -66,7 +66,7 @@ class StudyAccountRepositoryTest {
         Study study = Study.builder()
                 .location(new Location(0, 0))
                 .build();
-        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, "국민 111", "010-1111-1111", StudyRole.MEMBER);
+        StudyAccount studyAccount = StudyAccount.CreateStudyAccount(account, study, "국민 111", StudyRole.MEMBER);
 
         accountRepository.save(account);
         studyRepository.save(study);
