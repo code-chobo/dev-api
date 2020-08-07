@@ -20,6 +20,8 @@
 
 ## 위키
 - [위키](https://github.com/code-chobo/dev-api/wiki)
+    - [엔티티 구조](https://github.com/code-chobo/dev-api/wiki/%EC%97%94%ED%8B%B0%ED%8B%B0-%EA%B5%AC%EC%A1%B0)
+    - [패키지 구조](https://github.com/code-chobo/dev-api/wiki/%ED%8C%A8%ED%82%A4%EC%A7%80-%EA%B5%AC%EC%A1%B0)
 
 ## 회고
 1. [@DataJpaTest는 임베디드 디비를 쓴다.](https://gracelove91.tistory.com/104?category=917256)
