@@ -19,7 +19,7 @@
     - IntelliJ IDEA
 
 ## 위키
-
+- [위키](https://github.com/code-chobo/dev-api/wiki)
 
 ## 회고
 1. [@DataJpaTest는 임베디드 디비를 쓴다.](https://gracelove91.tistory.com/104?category=917256)
