@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: local
+  cloud:
+    kubernetes:
+      config:
+        enabled: false
+      loadbalancer:
+        enabled: false

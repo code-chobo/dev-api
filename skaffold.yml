@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta8
+kind: Config
+metadata:
+  name: codechobo
+build:
+  artifacts:
+    - image: codechobo
+  context: .
+  jib:
+    project: kr.codechobo:codechobo
+deploy:
+  kubectl:
+    manifests:
+      - k8s/*.yml
+    defaultNamespace: default

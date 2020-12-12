@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  spring.datasource.url: jdbc:mysql://localhost:3306/codechobo_test?serverTimezone=Asia/Seoul&useSSL=false
+  spring.datasource.username: codechobo_user
+  spring.datasource.password: password
+  spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
+  spring.jpa.open-in-view: 'false'
+  spring.jpa.hibernate.ddl-auto: none
+  logging.level.org.hibernate.SQL: debug
+  logging.level.org.hibernate.type: trace
+  logging.level.org.springframework.security: debug
+  logging.level.org.springframework.web: debug
